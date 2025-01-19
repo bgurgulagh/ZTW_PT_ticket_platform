@@ -1,0 +1,59 @@
+{% include 'header.html' %}
+
+<body>
+  <div class="main-content">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark">
+      <div class="container-xxl py-2 px-4">
+        <div class="navbar-brand">
+          <img
+            src="{{ url_for('static', filename='images/logo.svg') }}"
+            width="90"
+            height="auto"
+          />
+        </div>
+      </div>
+    </nav>
+
+    <!-- Login Section -->
+    <section id="login">
+      <div class="container-lg mt-4 py-3 px-4">
+        <div class="row">
+          <h1 class="display-4">Logowanie</h1>
+          <div class="col-md-6 mx-auto">
+            {% if error %}
+            <div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endif %}
+            <form method="POST" action="{{ url_for('login') }}">
+              <div class="mb-3">
+                <label for="username" class="form-label"
+                  >Nazwa użytkownika</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="username"
+                  name="username"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Hasło</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  name="password"
+                  required
+                />
+              </div>
+              <button type="submit" class="btn btn-primary">Zaloguj się</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  {% include 'footer.html' %}
+</body>
