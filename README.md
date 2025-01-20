@@ -1,4 +1,4 @@
-# ZTW_PT_ticket_platform
+# Aplikacja webowa do zarządzania biletami KMK
 ## Kolorystyka:  
 Granatowy #00305F  
 Ciemny szary #9D9D9C [m.in. nieaktywne przyciski]  
