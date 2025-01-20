@@ -1,0 +1,29 @@
+    <script src="ticket.js" defer></script>
+    <link rel="stylesheet" href="ticket_style.css">
+    <!--Aby zmienić bilet trzeba zmienić ID na jedno z dostępnych w JSON-->
+    <div class="ticket" id="ticket_70min_discount_all">
+        <div id="ticket_main_info">
+            <div id="ticket_main_info_spec">
+                <img id="ticket_time">
+                <div id="ticket_main_info_tariff">
+                    <img id="ticket_tariff">
+                    <img id="ticket_zone">
+                </div>
+            </div>
+            <p id="ticket_price"></p>
+        </div>
+        <div id="divider"></div>
+        <div id="ticket_description_time">
+            <p id="ticket_description"></p>
+        </div>
+        <div id="divider"></div>
+        <div id="ticket_quantity_remaining">
+            <button class="button_quantity" id="button_minus">
+                <img src="button_minus.svg">
+            </button>
+            <p id="ticket_quantity">0</p>
+            <button class="button_quantity" id="button_plus">
+                <img src="button_plus.svg">
+            </button>
+        </div>
+    </div>

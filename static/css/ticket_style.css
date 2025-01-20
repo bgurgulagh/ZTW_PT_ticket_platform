@@ -1,0 +1,77 @@
+*{
+    box-sizing: border-box;
+    font-family: 'Figtree', sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+    text-decoration: none;
+    color: black;
+}
+p{
+    padding: 0px;
+    margin: 0px;
+}
+.ticket{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: #E6E6E6;
+    width: 400px;
+    padding: 15px;
+}
+.button_quantity{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #00305F;
+    width: 30%;
+    height: 100%;
+}
+#ticket_main_info{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+}
+#ticket_main_info_spec{
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    height: 100%;
+}
+#ticket_main_info_tariff{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    height: 100%;
+}
+#ticket_main_info_tariff img{
+    height: 43%;
+    width: auto;
+    object-fit: fill;
+}
+#ticket_quantity_remaining{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+}
+#ticket_quantity, #ticket_price{
+    font-size: 40px;
+    font-weight: 700;
+}
+#ticket_price{
+    margin-right: 10px;
+}
+#divider{
+    background-color: #00305F;
+    height: 1.5px;
+}
+button{
+    z-index: 1000;
+    pointer-events: auto;
+    border: none;
+}
