@@ -20,9 +20,14 @@ body {
 background-color: #002F5D;
 }
 
-.btn{
+.btn-primary{
     background-color: #002F5D;
     border: 0;
+}
+
+.btn-outline-primary{
+    border-color: #002F5D;
+    color: #002F5D;
 }
 /* login */
 #login {

@@ -28,9 +28,14 @@ def kup_bilet():
 def moj_profil():
     return render_template('pages/template.html', title='Mój profil', header='Mój profil')
 
+
 @app.route('/moj_profil_zb')
 def moj_profil_zb():
-    return render_template('pages/template_copy_zb.html', title='Mój profil', header='Mój profil')
+    return render_template('pages/template_copy3_zb.html', title='Mój profil', header='Mój profil')
+
+@app.route('/profil_kontrolera_zb')
+def profil_kontrolera_zb():
+    return render_template('pages/template_copy_zb.html', title='Profil kontrolera', header='Mój profil')
 
 @app.route('/kontrola_zb')
 def kontrola_zb():
