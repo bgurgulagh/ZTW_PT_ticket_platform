@@ -1,0 +1,61 @@
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+    const currentPath = window.location.pathname; // Aktualna ścieżka URL
+
+    // Ustawienie klasy 'active' na podstawie bieżącego URL-a
+    navLinks.forEach((link) => {
+      if (link.getAttribute("href") === currentPath) {
+        link.classList.add("active");
+      } else {
+        link.classList.remove("active");
+      }
+    });
+  });
+</script>
+<nav class="navbar navbar-expand-md navbar-dark">
+  <div class="container-xxl py-2 px-4">
+    <div class="navbar-brand">
+      <img
+        src="{{ url_for('static', filename='images/logo.svg') }}"
+        width="90"
+        height="auto"
+      />
+    </div>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#main-nav"
+      aria-controls="main-nav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div
+      class="collapse navbar-collapse justify-content-end align-center"
+      id="main-nav"
+    >
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a
+            href="/moje_bilety"
+            class="nav-link active"
+            onload="checkActive(this)"
+            >Moje bilety</a
+          >
+        </li>
+
+        <li class="nav-item" onclick="checkActive(this)">
+          <a href="/kup_bilet" class="nav-link">Kup bilet</a>
+        </li>
+        <li class="nav-item" onload="checkActive(this)">
+          <a href="/moj_profil" class="nav-link">Mój profil</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
