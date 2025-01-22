@@ -1,0 +1,50 @@
+{% include 'header.html' %}
+
+<body>
+  <div class="main-content">
+    <!-- Navbar -->
+    {% include 'navbar.html' %}
+
+    <!-- Main Section -->
+    <section id="moje-bilety">
+      <div class="container-lg mt-4 py-3 px-4">
+        <div class="row">
+          <h1 class="display-4">{{ header if header else 'Moje bilety' }}</h1>
+        </div>
+      </div>
+    </section>
+
+    <section id="moj-profil">
+      <div class="container-lg mt-1 py-3 px-4">
+        <table class="table">
+          <tbody>
+            <tr>
+              <th scope="row">Imię</th>
+              <td>Jan</td>
+            </tr>
+            <tr>
+              <th scope="row">Nazwisko</th>
+              <td>Kowalski</td>
+            </tr>
+            <tr>
+              <th scope="row">E-mail</th>
+              <td>jan.kowalski@example.com</td>
+            </tr>
+            <tr>
+              <th scope="row">username</th>
+              <td>JanKowalski</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  {% include 'footer.html' %}
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"
+  ></script>
+</body>
