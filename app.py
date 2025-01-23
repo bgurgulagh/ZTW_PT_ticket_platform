@@ -41,5 +41,9 @@ def profil_kontrolera_zb():
 def kontrola_zb():
     return render_template('pages/template_copy2_zb.html', title='Kontrola', header='Kontrola biletów')
 
+@app.route('/rejestracja_zb')
+def rejestracja_zb():
+    return render_template('signup_zb.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
