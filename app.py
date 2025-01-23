@@ -45,5 +45,9 @@ def kontrola_zb():
 def rejestracja_zb():
     return render_template('signup_zb.html')
 
+@app.route('/admin_users_zb')
+def admin_users_zb():
+    return render_template('pages/template_copy4_zb.html', title='Użytkownicy', header='Użytkownicy')
+
 if __name__ == '__main__':
     app.run(debug=True)
