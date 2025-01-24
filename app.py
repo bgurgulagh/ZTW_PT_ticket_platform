@@ -25,21 +25,16 @@ def kup_bilet():
     return render_template('pages/template.html', title='Kup bilety', header='Kup bilety')
 
 @app.route('/moj_profil')
-def moj_profil():
-    return render_template('pages/template.html', title='Mój profil', header='Mój profil')
-
-
-@app.route('/moj_profil_zb')
 def moj_profil_zb():
-    return render_template('pages/template_copy3_zb.html', title='Mój profil', header='Mój profil')
+    return render_template('pages/profile_user.html', title='Mój profil', header='Mój profil')
 
-@app.route('/profil_kontrolera_zb')
+@app.route('/profil_kontrolera')
 def profil_kontrolera_zb():
-    return render_template('pages/template_copy_zb.html', title='Profil kontrolera', header='Mój profil')
+    return render_template('pages/controler_noEdit.html', title='Profil kontrolera', header='Mój profil')
 
-@app.route('/kontrola_zb')
+@app.route('/kontrola')
 def kontrola_zb():
-    return render_template('pages/template_copy2_zb.html', title='Kontrola', header='Kontrola biletów')
+    return render_template('pages/controler_ticketCheck.html', title='Kontrola', header='Kontrola biletów')
 
 @app.route('/rejestracja_zb')
 def rejestracja_zb():
@@ -47,7 +42,7 @@ def rejestracja_zb():
 
 @app.route('/admin_users_zb')
 def admin_users_zb():
-    return render_template('pages/template_copy4_zb.html', title='Użytkownicy', header='Użytkownicy')
+    return render_template('pages/admin_userBase.html', title='Użytkownicy', header='Użytkownicy')
 
 if __name__ == '__main__':
     app.run(debug=True)
