@@ -42,33 +42,83 @@
                   </tr>
               </thead>
               <tbody>
-                  <!-- przykładowy rekord -->
-                  <tr>
-                      <td>1</td>
-                      <td>Jan</td>
-                      <td>Kowalski</td>
-                      <td>JanKowalski</td>
-                      <td>jan.kowalski@example.com</td>
-                      <td>********</td>
-                      <td>pasażer</td>
-                      <td>
-                          <button class="btn btn-sm btn-outline-primary">
-                              <i class="bi bi-pencil"></i>
-                          </button>
-                      </td>
-                      <td>    
-                          <button class="btn btn-sm btn-danger">
-                              <i class="bi bi-trash"></i>
-                          </button>
-                      </td>
-                  </tr>
-                  <!-- więcej rekordów tutaj -->
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.surname }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>********</td> <!-- Ukrycie hasła dla bezpieczeństwa -->
+                    <td>{{ user.role }}</td>
+                    <td>
+                      <button class="btn btn-sm btn-outline-primary edit-user" data-user-id="{{ user.id }}" 
+                              data-name="{{ user.name }}" data-surname="{{ user.surname }}" 
+                              data-username="{{ user.username }}" data-email="{{ user.email }}" 
+                              data-role="{{ user.role }}">
+                          <i class="bi bi-pencil"></i>
+                      </button>
+                    </td>
+                    <td>    
+                      <button class="btn btn-sm btn-danger delete-user" data-user-id="{{ user.id }}">
+                          <i class="bi bi-trash"></i>
+                      </button>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="9" class="text-center">Brak użytkowników w bazie.</td>
+                </tr>
+                {% endfor %}
               </tbody>
           </table>
         </div>
       
       </div>
     </section>
+    <div id="editUserModal" class="modal fade" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title">Edytuj użytkownika</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <form id="editUserForm">
+                      <input type="hidden" id="editUserId">
+                      <div class="mb-3">
+                          <label for="editName" class="form-label">Imię</label>
+                          <input type="text" class="form-control" id="editName">
+                      </div>
+                      <div class="mb-3">
+                          <label for="editSurname" class="form-label">Nazwisko</label>
+                          <input type="text" class="form-control" id="editSurname">
+                      </div>
+                      <div class="mb-3">
+                          <label for="editUsername" class="form-label">Username</label>
+                          <input type="text" class="form-control" id="editUsername">
+                      </div>
+                      <div class="mb-3">
+                          <label for="editEmail" class="form-label">Email</label>
+                          <input type="email" class="form-control" id="editEmail">
+                      </div>
+                      <div class="mb-3">
+                          <label for="editRole" class="form-label">Rola</label>
+                          <select class="form-control form-select" id="editRole">
+                              <option value="pasażer">Pasażer</option>
+                              <option value="kontroler">Kontroler</option>
+                              <option value="admin">Admin</option>
+                          </select>
+                    </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
+                  <button type="button" class="btn btn-primary" id="saveUserChanges">Zapisz zmiany</button>
+              </div>
+          </div>
+      </div>
+    </div>
   </div>
 
   {% include 'footer.html' %}
@@ -78,4 +128,6 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"
   ></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="../static/scripts/user.js"></script>
 </body>
