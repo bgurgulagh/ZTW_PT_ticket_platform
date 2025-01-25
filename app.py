@@ -83,9 +83,9 @@ def profil_kontrolera_zb():
 def kontrola_zb():
     return render_template('pages/controler_ticketCheck.html', title='Kontrola', header='Kontrola biletów')
 
-@app.route('/rejestracja_zb')
-def rejestracja_zb():
-    return render_template('signup_zb.html')
+@app.route('/rejestracja')
+def rejestracja():
+    return render_template('signup.html')
 
 @app.route('/admin_users')
 def admin_users():
@@ -119,7 +119,7 @@ def update_user_ajax(user_id):
     db.session.commit()
     return jsonify({"success": True})
 
-# endopinty tymczasowe do developmentu bazy danych
+# endpointy tymczasowe do developmentu bazy danych
 @app.route('/add_user')
 def add_user():
     new_user = User(name='John', surname='Doe', username='bzzzf', password='gula18', role='kontroler', email='email@emafil.com')
