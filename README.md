@@ -7,13 +7,13 @@ Zielony #65A930 [m.in. potwierdzenie płatności, przycisk do kupowania biletów
 Czerwony #E00726 [m.in. błędy, ostrzeżenia]  
 
 ## Uruchomienie aplikacji
-python -m venv venv
-.\venv\Scripts\activate
-pip install -r requirements.txt
-(Jak nie dziala to pip install Flask Flask-SQLAlchemy)
-
-python app.py
-LUB
-set FLASK_APP=app.py
-set FLASK_ENV=development 
-flask run
+python -m venv venv  
+.\venv\Scripts\activate  
+pip install -r requirements.txt  
+(Jak nie dziala to pip install Flask Flask-SQLAlchemy)  
+  
+python app.py  
+LUB  
+set FLASK_APP=app.py  
+set FLASK_ENV=development  
+flask run  
