@@ -19,8 +19,7 @@
       <img
         src="{{ url_for('static', filename='images/logo.svg') }}"
         width="90"
-        height="auto"
-      />
+        height="auto"/>
     </div>
 
     <button
@@ -30,23 +29,20 @@
       data-bs-target="#main-nav"
       aria-controls="main-nav"
       aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
+      aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div
       class="collapse navbar-collapse justify-content-end align-center"
-      id="main-nav"
-    >
+      id="main-nav">
       <ul class="navbar-nav">
         <li class="nav-item">
           <a
             href="/moje_bilety"
             class="nav-link active"
             onload="checkActive(this)"
-            >Moje bilety</a
-          >
+            >Moje bilety</a>
         </li>
 
         <li class="nav-item" onclick="checkActive(this)">
@@ -59,3 +55,16 @@
     </div>
   </div>
 </nav>
+
+<!-- Wyświetlanie powiadomień z systemu -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="container mt-3">
+      {% for message in messages %}
+        <div class="alert alert-info" role="alert">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}

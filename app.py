@@ -1,8 +1,17 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, flash, session
 from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail, Message
+from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
+app.config['MAIL_SERVER'] = 'smtp-relay.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'portal.pasazera.kmk@gmail.com'
+app.config['MAIL_PASSWORD'] = 'hasło'
+mail = Mail(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///default.db'
+app.config['SECRET_KEY'] = 'supersecretkey'
 app.config['SQLALCHEMY_BINDS'] = {
     'users': 'sqlite:///users.db',
     'tickets': 'sqlite:///tickets.db',
@@ -119,6 +128,78 @@ def update_user_ajax(user_id):
     db.session.commit()
     return jsonify({"success": True})
 
+@app.route('/add_user_ajax', methods=['POST'])
+def add_user_ajax():
+    data = request.get_json()
+    try:
+        new_user = User(
+            name=data['name'],
+            surname=data['surname'],
+            username=data['username'],
+            email=data['email'],
+            role=data['role'],
+            password=generate_password_hash(data['password'])
+        )
+        db.session.add(new_user)
+        db.session.commit()
+        return jsonify({"success": True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"success": False, "error": str(e)})
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        firstname = request.form.get('firstname')
+        lastname = request.form.get('lastname')
+        username = request.form.get('username')
+        email = request.form.get('email')
+        role = request.form.get('role')
+        password = request.form.get('password')
+
+        # Sprawdzenie, czy użytkownik już istnieje
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            flash('Nazwa użytkownika jest już zajęta. Wybierz inną.', 'danger')
+            return redirect(url_for('signup'))
+
+        new_user = User(
+            name=firstname,
+            surname=lastname,
+            username=username,
+            email=email,
+            password=generate_password_hash(password),
+            role=role
+        )
+
+        db.session.add(new_user)
+        db.session.commit()
+        flash('Rejestracja zakończona sukcesem! Możesz się teraz zalogować.', 'success')
+        return redirect(url_for('login'))
+
+    return render_template('signup.html')
+
+@app.route('/reset_password/<int:user_id>', methods=['POST'])
+def reset_password(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'success': False, 'message': 'Użytkownik nie istnieje'}), 404
+
+    data = request.get_json()
+    new_password = data.get('password')
+
+    if not new_password:
+        return jsonify({'success': False, 'message': 'Brak hasła'}), 400
+
+    user.password = generate_password_hash(new_password)
+    db.session.commit()
+
+    #msg = Message("Twoje nowe hasło", sender="Portal Pasażera KMK", recipients=[user.email])
+    #msg.body = f"Twoje nowe hasło do Portalu Pasażera to: {new_password}"
+    #mail.send(msg)
+
+    return jsonify({'success': True, 'message': 'Hasło zresetowane i wysłane na e-mail.'})
+
 # endpointy tymczasowe do developmentu bazy danych
 @app.route('/add_user')
 def add_user():
@@ -132,6 +213,7 @@ def get_users():
     users = User.query.all()
     user_list = [f"{user.id}: {user.name} {user.surname}, l.{user.username}, h.{user.password}, {user.role} ({user.email})" for user in users]
     return "<br>".join(user_list)
+# koniec tymczasowych endpointów
 
 if __name__ == '__main__':
     with app.app_context():

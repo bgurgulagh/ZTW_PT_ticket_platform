@@ -15,20 +15,31 @@
       </div>
     </nav>
 
-    <!-- Signup Section -->
+    <!-- Wyświetlanie powiadomień z systemu -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="container mt-3">
+          {% for message in messages %}
+            <div class="alert alert-info" role="alert">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Rejestracja -->
     <section id="signup">
       <div class="container-lg mt-4 py-3 px-4">
         <div class="row">
           <h1 class="text-center display-4">Rejestracja</h1>
           <div class="col-md-6 mx-auto py-4">
-            <!--{% if error %}
+            {% if error %}
             <div class="alert alert-danger" role="alert">{{ error }}</div>
             {% endif %}
-            <form method="POST" action="{{ url_for('login') }}">-->
+            <form method="POST" action="{{ url_for('signup') }}">
               <div class="mb-3">
-                <label for="firstname" class="form-label"
-                  >Imię</label
-                >
+                <label for="firstname" class="form-label">Imię</label>
                 <input
                   type="text"
                   class="form-control"
@@ -38,9 +49,7 @@
                 />
               </div>
               <div class="mb-3">
-                <label for="lastname" class="form-label"
-                  >Nazwisko</label
-                >
+                <label for="lastname" class="form-label">Nazwisko</label>
                 <input
                   type="text"
                   class="form-control"
@@ -50,9 +59,7 @@
                 />
               </div>
               <div class="mb-3">
-                <label for="username" class="form-label"
-                  >Nazwa użytkownika</label
-                >
+                <label for="username" class="form-label">Nazwa użytkownika</label>
                 <input
                   type="text"
                   class="form-control"
@@ -62,18 +69,16 @@
                 />
               </div>
               <div class="mb-3">
-                <label for="email" class="form-label"
-                  >Adres e-mail</label
-                >
+                <label for="email" class="form-label">Adres e-mail</label>
                 <input
-                  type="text"
+                  type="email"
                   class="form-control"
                   id="email"
                   name="email"
                   required
                 />
               </div>
-              
+              <input type="hidden" name="role" value="pasażer">
               <div class="mb-3">
                 <label for="password" class="form-label">Hasło</label>
                 <input
@@ -90,7 +95,6 @@
               <div class="d-flex justify-content-center">
                 <a href="/" role="button" class="btn btn-link">Masz już konto? Zaloguj się</a>
               </div>
-              
             </form>
           </div>
         </div>
