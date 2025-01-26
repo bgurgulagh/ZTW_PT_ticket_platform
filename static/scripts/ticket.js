@@ -26,8 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
       ticketElement.querySelector("#ticket_time").src = "../static/images/time_" + ticketData.time + "_" + ticketData.zone + ".svg";
       ticketElement.querySelector("#ticket_tariff").src = "../static/images/tariff_" + ticketData.tariff + ".svg";
       ticketElement.querySelector("#ticket_zone").src = "../static/images/zone_" + ticketData.zone + ".svg";
-      ticketElement.querySelector("#ticket_price").textContent = ticketData.price + "zł";
       ticketElement.querySelector("#ticket_description").textContent = ticketData.description;
+      ticketElement.querySelector("#ticket_price").textContent = ticketData.price + "zł";
     };
   
     const tickets = document.querySelectorAll(".ticket");

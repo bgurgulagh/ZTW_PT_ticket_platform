@@ -1,7 +1,7 @@
 <script src="../static/scripts/ticket.js"></script>
 <link rel="stylesheet" href="../static/css/ticket_style.css"/>
 <!--Aby zmienić bilet trzeba zmienić ID na jedno z dostępnych w JSON-->
-<div class="ticket" id="ticket_70min_discount_all">
+<div class="ticket" id="ticket_60min_normal_all">
   <div id="ticket_main_info">
     <div id="ticket_main_info_spec">
       <img id="ticket_time" />
@@ -11,19 +11,15 @@
       </div>
     </div>
     <div id="ticket_price_time">
-      <p id="ticket_price"></p>
+      <p>Ważny od:</p>
+      <p id="ticket_buy_time">27.01.2025 12:57</p>
     </div>
   </div>
   <div id="divider"></div>
   <p id="ticket_description"></p>
   <div id="divider"></div>
-  <div id="ticket_quantity_section">
-    <button class="button_quantity" id="button_minus">
-      <img src="../static/images/button_minus.svg"/>
-    </button>
-    <p id="ticket_quantity">0</p>
-    <button class="button_quantity" id="button_plus">
-      <img src="../static/images/button_plus.svg"/>
-    </button>
+  <div id="ticket_remaining_section">
+    <p id="ticket_remaining">Pozostało:</p>
+    <p id="ticket_remaining_time">14 min</p>
   </div>
 </div>
