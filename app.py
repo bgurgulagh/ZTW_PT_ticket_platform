@@ -4,11 +4,11 @@ from flask_mail import Mail, Message
 from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
-app.config['MAIL_SERVER'] = 'smtp-relay.gmail.com'
+app.config['MAIL_SERVER'] = 'smtp-relay.gmail.com' # Póki co niekatywne, ponieważ musze założyć najpierw skrzynkę, ogarnę przy następnej aktualizacji
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'portal.pasazera.kmk@gmail.com'
-app.config['MAIL_PASSWORD'] = 'hasło'
+app.config['MAIL_PASSWORD'] = 'hasło' # Trzeba podać hasło do skrzynki
 mail = Mail(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///default.db'
 app.config['SECRET_KEY'] = 'supersecretkey'
@@ -74,23 +74,23 @@ def login():
 
 @app.route('/moje_bilety')
 def moje_bilety():
-    return render_template('pages/template.html', title='Moje bilety', header='Moje bilety')
+    return render_template('pages/tickets_check.html', title='Moje bilety –', header='Moje bilety')
 
 @app.route('/kup_bilet')
 def kup_bilet():
-    return render_template('pages/template.html', title='Kup bilety', header='Kup bilety')
+    return render_template('pages/tickets.html', title='Kup bilety –', header='Kup bilety')
 
 @app.route('/moj_profil')
-def moj_profil_zb():
-    return render_template('pages/profile_user.html', title='Mój profil', header='Mój profil')
+def moj_profil():
+    return render_template('pages/profile_user.html', title='Mój profil –', header='Mój profil')
 
 @app.route('/profil_kontrolera')
-def profil_kontrolera_zb():
-    return render_template('pages/controler_noEdit.html', title='Profil kontrolera', header='Mój profil')
+def profil_kontrolera():
+    return render_template('pages/controler_noEdit.html', title='Profil kontrolera –', header='Mój profil')
 
 @app.route('/kontrola')
-def kontrola_zb():
-    return render_template('pages/controler_ticketCheck.html', title='Kontrola', header='Kontrola biletów')
+def kontrola():
+    return render_template('pages/controler_ticketCheck.html', title='Kontrola –', header='Kontrola biletów')
 
 @app.route('/rejestracja')
 def rejestracja():
@@ -99,7 +99,7 @@ def rejestracja():
 @app.route('/admin_users')
 def admin_users():
     users = User.query.all()
-    return render_template('pages/admin_userBase.html', title='Użytkownicy', header='Użytkownicy', users=users)
+    return render_template('pages/admin_userBase.html', title='Użytkownicy –', header='Użytkownicy', users=users)
 
 @app.route('/delete_user_ajax/<int:user_id>', methods=['DELETE'])
 def delete_user_ajax(user_id):
@@ -178,6 +178,37 @@ def signup():
         return redirect(url_for('login'))
 
     return render_template('signup.html')
+
+@app.route('/filter_users', methods=['GET'])
+def filter_users():
+    name = request.args.get('name', '')
+    surname = request.args.get('surname', '')
+    username = request.args.get('username', '')
+    role = request.args.get('role', '')
+
+    query = User.query
+    if name:
+        query = query.filter(User.name.ilike(f"%{name}%"))
+    if surname:
+        query = query.filter(User.surname.ilike(f"%{surname}%"))
+    if username:
+        query = query.filter(User.username.ilike(f"%{username}%"))
+    if role:
+        query = query.filter(User.role.ilike(f"%{role}%"))
+
+    users = query.all()
+    users_data = [
+        {
+            "id": user.id,
+            "name": user.name,
+            "surname": user.surname,
+            "username": user.username,
+            "email": user.email,
+            "role": user.role
+        }
+        for user in users
+    ]
+    return jsonify(users_data)
 
 @app.route('/reset_password/<int:user_id>', methods=['POST'])
 def reset_password(user_id):

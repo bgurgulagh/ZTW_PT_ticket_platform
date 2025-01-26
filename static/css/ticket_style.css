@@ -1,4 +1,4 @@
-*{
+* {
     box-sizing: border-box;
     font-family: 'Figtree', sans-serif;
     font-size: 16px;
@@ -6,11 +6,13 @@
     text-decoration: none;
     color: black;
 }
-p{
+
+p {
     padding: 0px;
     margin: 0px;
 }
-.ticket{
+
+.ticket {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -18,7 +20,8 @@ p{
     width: 400px;
     padding: 15px;
 }
-.button_quantity{
+
+.button_quantity {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -26,20 +29,23 @@ p{
     width: 30%;
     height: 100%;
 }
-#ticket_main_info{
+
+#ticket_main_info {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     height: 70px;
 }
-#ticket_main_info_spec{
+
+#ticket_main_info_spec {
     display: flex;
     flex-direction: row;
     gap: 15px;
     height: 100%;
 }
-#ticket_main_info_tariff{
+
+#ticket_main_info_tariff {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -47,19 +53,22 @@ p{
     gap: 10px;
     height: 100%;
 }
-#ticket_main_info_tariff img{
+
+#ticket_main_info_tariff img {
     height: 43%;
     width: auto;
     object-fit: fill;
 }
-#ticket_quantity_section{
+
+#ticket_quantity_section {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     height: 70px;
 }
-#ticket_remaining_section{
+
+#ticket_remaining_section {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -67,31 +76,38 @@ p{
     height: 70px;
     background-color: #00305F;
 }
-#ticket_remaining_section p{
+
+#ticket_remaining_section p {
     color: white;
 }
-#ticket_remaining_time{
+
+#ticket_remaining_time {
     font-size: 26px;
     font-weight: 700;
 }
-#ticket_quantity, #ticket_price{
+
+#ticket_quantity, #ticket_price {
     font-size: 40px;
     font-weight: 700;
 }
-#ticket_price{
+
+#ticket_price {
     margin-right: 10px;
 }
-#ticket_price_time{
+
+#ticket_price_time {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
-#divider{
+
+#divider {
     background-color: #00305F;
     height: 1.5px;
 }
-button{
+
+button {
     z-index: 1000;
     pointer-events: auto;
     border: none;

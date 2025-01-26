@@ -1,17 +1,13 @@
-<!--admin-baza użytkowników-->
-
 {% include 'header.html' %}
 
 <body>
   <div class="main-content">
-    <!-- Navbar -->
     {% include 'navbar.html' %}
 
-    <!-- Main Section -->
-    <section id="moje-bilety">
+    <section id="header_name">
       <div class="container-xl mt-4 py-3 px-4">
         <div class="row">
-          <h1 class="display-4">{{ header if header else 'Moje bilety' }}</h1>
+          <h1 class="display-4">{{ header if header else '' }}</h1>
         </div>
       </div>
     </section>
@@ -19,6 +15,36 @@
     <section id="user-table">
       <div class="container-xl mt-1 py-3 px-4">
         
+        <!-- Sekcja filtrów -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+          <h3 class="mb-0">Filtry</h3>
+          <div id="filter_buttons">
+            <button id="resetBtn" class="btn btn-outline-primary">Reset</button>
+            <button id="filterBtn" class="btn btn-primary">Filtruj</button>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-3">
+              <input type="text" id="filterName" class="form-control" placeholder="Imię">
+          </div>
+          <div class="col-md-3">
+              <input type="text" id="filterSurname" class="form-control" placeholder="Nazwisko">
+          </div>
+          <div class="col-md-3">
+              <input type="text" id="filterUsername" class="form-control" placeholder="Login">
+          </div>
+          <div class="col-md-3">
+              <select id="filterRole" class="form-control form-select">
+                  <option value="">Wszystkie role</option>
+                  <option value="admin">Admin</option>
+                  <option value="kontroler">Kontroler</option>
+                  <option value="pasażer">Pasażer</option>
+              </select>
+          </div>
+        </div><br><br>
+
+        <!-- Tabela użytkowników -->
         <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
           <h3 class="mb-0">Lista użytkowników</h3>
           <button id="addUserBtn" class="btn btn-primary mt-2 mt-md-0">
@@ -26,148 +52,59 @@
           </button>
         </div>
 
-        <div class="table-responsive">
-          <table class="table align-middle">
+        <div id="userTableContainer">
+          <table class="table align-middle mt-3" id="userTable">
               <thead>
                   <tr>
                       <th>ID</th>
                       <th>Imię</th>
                       <th>Nazwisko</th>
-                      <th>Username</th>
+                      <th>Login</th>
                       <th>Email</th>
-                      <th>Hasło</th>
                       <th>Rola</th>
                       <th>Edytuj</th>
                       <th>Usuń</th>
                   </tr>
               </thead>
               <tbody>
-                {% for user in users %}
-                <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.surname }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>********</td> <!-- Ukrycie hasła dla bezpieczeństwa -->
-                    <td>{{ user.role }}</td>
-                    <td>
-                      <button class="btn btn-sm btn-outline-primary edit-user" data-user-id="{{ user.id }}" 
-                              data-name="{{ user.name }}" data-surname="{{ user.surname }}" 
-                              data-username="{{ user.username }}" data-email="{{ user.email }}" 
-                              data-role="{{ user.role }}">
-                          <i class="bi bi-pencil"></i>
-                      </button>
-                    </td>
-                    <td>    
-                      <button class="btn btn-sm btn-danger delete-user" data-user-id="{{ user.id }}">
-                          <i class="bi bi-trash"></i>
-                      </button>
-                    </td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="9" class="text-center">Brak użytkowników w bazie.</td>
-                </tr>
-                {% endfor %}
+                  {% for user in users %}
+                  <tr>
+                      <td>{{ user.id }}</td>
+                      <td>{{ user.name }}</td>
+                      <td>{{ user.surname }}</td>
+                      <td>{{ user.username }}</td>
+                      <td>{{ user.email }}</td>
+                      <td>{{ user.role }}</td>
+                      <td>
+                          <button class="btn btn-sm btn-outline-primary edit-user" 
+                                  data-user-id="{{ user.id }}" 
+                                  data-name="{{ user.name }}"
+                                  data-surname="{{ user.surname }}"
+                                  data-username="{{ user.username }}"
+                                  data-email="{{ user.email }}"
+                                  data-role="{{ user.role }}">
+                              <i class="bi bi-pencil"></i>
+                          </button>
+                      </td>
+                      <td>
+                          <button class="btn btn-sm btn-danger delete-user" data-user-id="{{ user.id }}">
+                              <i class="bi bi-trash"></i>
+                          </button>
+                      </td>
+                  </tr>
+                  {% endfor %}
               </tbody>
           </table>
         </div>
       
       </div>
     </section>
-  <!-- Pop up edycji użytkowników -->
-    <div id="editUserModal" class="modal fade" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title">Edytuj użytkownika</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                  <form id="editUserForm">
-                      <input type="hidden" id="editUserId">
-                      <div class="mb-3">
-                          <label for="editName" class="form-label">Imię</label>
-                          <input type="text" class="form-control" id="editName">
-                      </div>
-                      <div class="mb-3">
-                          <label for="editSurname" class="form-label">Nazwisko</label>
-                          <input type="text" class="form-control" id="editSurname">
-                      </div>
-                      <div class="mb-3">
-                          <label for="editUsername" class="form-label">Username</label>
-                          <input type="text" class="form-control" id="editUsername">
-                      </div>
-                      <div class="mb-3">
-                          <label for="editEmail" class="form-label">Email</label>
-                          <input type="email" class="form-control" id="editEmail">
-                      </div>
-                      <div class="mb-3">
-                          <label for="editRole" class="form-label">Rola</label>
-                          <select class="form-control form-select" id="editRole">
-                              <option value="pasażer">Pasażer</option>
-                              <option value="kontroler">Kontroler</option>
-                              <option value="admin">Admin</option>
-                          </select>
-                      </div>
-                      <div class="mb-3">
-                        <label for="resetPassword" class="form-label">Reset hasła</label><br>
-                        <button type="button" class="btn btn-warning" id="resetPasswordBtn">Resetuj hasło użytkownika</button>
-                      </div>
-                  </form>
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
-                  <button type="button" class="btn btn-primary" id="saveUserChanges">Zapisz zmiany</button>
-              </div>
-          </div>
-      </div>
-    </div>
+
+    <!-- Pop up edycji użytkowników -->
+    {% include 'admin_edit_user_modal.html' %}
 
     <!-- Pop up dodawania użytkowników -->
-    <div id="addUserModal" class="modal fade" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title">Dodaj nowego użytkownika</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                  <form id="addUserForm">
-                      <div class="mb-3">
-                          <label for="addName" class="form-label">Imię</label>
-                          <input type="text" class="form-control" id="addName">
-                      </div>
-                      <div class="mb-3">
-                          <label for="addSurname" class="form-label">Nazwisko</label>
-                          <input type="text" class="form-control" id="addSurname">
-                      </div>
-                      <div class="mb-3">
-                          <label for="addUsername" class="form-label">Username</label>
-                          <input type="text" class="form-control" id="addUsername">
-                      </div>
-                      <div class="mb-3">
-                          <label for="addEmail" class="form-label">Email</label>
-                          <input type="email" class="form-control" id="addEmail">
-                      </div>
-                      <div class="mb-3">
-                          <label for="addRole" class="form-label">Rola</label>
-                          <select class="form-control form-select" id="addRole">
-                              <option value="pasażer">Pasażer</option>
-                              <option value="kontroler">Kontroler</option>
-                              <option value="admin">Admin</option>
-                          </select>
-                      </div>
-                  </form>
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
-                  <button type="button" class="btn btn-primary" id="saveNewUser">Dodaj użytkownika</button>
-              </div>
-          </div>
-      </div>
-    </div>
+    {% include 'admin_add_user_modal.html' %}
   </div>
 
   {% include 'footer.html' %}

@@ -1,3 +1,10 @@
+*{
+    font-family: 'Figtree', sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+    text-decoration: none;
+}
+
 html, body {
     height: 100%;
 }
@@ -5,7 +12,7 @@ html, body {
 body {
     display: flex;
     flex-direction: column;
-    font-family: 'Figtree', 'Segoe UI', Tahoma, Verdana, sans-serif;
+    padding-top: 70px;
 }
 
 .main-content {
@@ -13,22 +20,47 @@ body {
 }
 
 .footer {
-    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: 15px;
+}
+
+#footer {
+    color: white;
+}
+
+#footer_by {
+    color: white;
+    font-size: 10px;
 }
 
 .navbar, .footer {
-background-color: #002F5D;
+    background-color: #00305F;
 }
 
-.btn-primary{
-    background-color: #002F5D;
-    border: 0;
+.btn-primary {
+    background-color: #00305F;
+    border-color: #00305F;
 }
 
-.btn-outline-primary{
-    border-color: #002F5D;
-    color: #002F5D;
+.btn-primary:hover {
+    background-color: #0063AF;
+    border-color: #0063AF;
 }
+
+.btn-outline-primary {
+    border-color: #00305F;
+    color: #00305F;
+}
+
+.btn-outline-primary:hover {
+    background-color: #0063AF;
+    border-color: #0063AF;
+}
+
 /* login */
 #login {
     margin-top: 50px;
@@ -49,7 +81,7 @@ form .form-control {
 
 /* przykładowy tickets.html */
 #tickets .ticket {
-    background-color: #f9f9f9;
+    background-color: #E6E6E6;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 20px;
@@ -59,11 +91,11 @@ form .form-control {
 #tickets .ticket-header {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #002f5d;
+    color: #00305F;
 }
 
 #tickets .ticket-body {
     font-size: 1.1rem;
-    color: #555;
+    color: #9D9D9C;
 }
 /* koniec przykładowy tickets.html */

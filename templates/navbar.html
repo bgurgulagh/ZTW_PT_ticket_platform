@@ -1,19 +1,5 @@
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
-    const currentPath = window.location.pathname; // Aktualna ścieżka URL
-
-    // Ustawienie klasy 'active' na podstawie bieżącego URL-a
-    navLinks.forEach((link) => {
-      if (link.getAttribute("href") === currentPath) {
-        link.classList.add("active");
-      } else {
-        link.classList.remove("active");
-      }
-    });
-  });
-</script>
-<nav class="navbar navbar-expand-md navbar-dark">
+<script src="../static/scripts/navbar.js"></script>
+<nav class="navbar navbar-expand-md navbar-dark fixed-top">
   <div class="container-xxl py-2 px-4">
     <div class="navbar-brand">
       <img

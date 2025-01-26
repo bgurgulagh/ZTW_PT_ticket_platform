@@ -139,3 +139,73 @@ $(document).ready(function() {
         });
     });
 });
+
+// Filtrowanie użytkowników
+$(document).ready(function() {
+    $("#filterBtn").click(function() {
+        let name = $("#filterName").val();
+        let surname = $("#filterSurname").val();
+        let username = $("#filterUsername").val();
+        let role = $("#filterRole").val();
+
+        $.ajax({
+            url: "/filter_users",
+            type: "GET",
+            data: {
+                name: name,
+                surname: surname,
+                username: username,
+                role: role
+            },
+            success: function(response) {
+                let tbody = $("#userTable tbody");
+                tbody.empty();
+
+                if (response.length === 0) {
+                    tbody.append("<tr><td colspan='8' class='text-center'>Brak wyników</td></tr>");
+                } else {
+                    response.forEach(function(user) {
+                        let row = `
+                            <tr>
+                                <td>${user.id}</td>
+                                <td>${user.name}</td>
+                                <td>${user.surname}</td>
+                                <td>${user.username}</td>
+                                <td>${user.email}</td>
+                                <td>${user.role}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary edit-user" 
+                                            data-user-id="${user.id}" 
+                                            data-name="${user.name}"
+                                            data-surname="${user.surname}"
+                                            data-username="${user.username}"
+                                            data-email="${user.email}"
+                                            data-role="${user.role}">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-danger delete-user" data-user-id="${user.id}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.append(row);
+                    });
+                }
+            },
+            error: function() {
+                alert("Wystąpił błąd podczas filtrowania.");
+            }
+        });
+    });
+
+    $("#resetBtn").click(function() {
+        $("#filterName").val('');
+        $("#filterSurname").val('');
+        $("#filterUsername").val('');
+        $("#filterRole").val('');
+        location.reload();
+    });
+});

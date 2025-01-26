@@ -2,15 +2,13 @@
 
 <body>
   <div class="main-content">
-    <!-- Navbar -->
     {% include 'navbar.html' %}
 
-    <!-- Main Section -->
     <section id="header_name">
       <div class="container-xl mt-4 py-3 px-4">
         <div class="row">
           <h1 class="display-4 ">
-            {{ header if header else 'Moje bilety' }}
+            {{ header if header else '' }}
           </h1>
         </div>
       </div>
@@ -19,7 +17,7 @@
     <!-- Tickets Section - W przyszłości będzie zawierać plik tickets.html -->
     <section id="tickets">
       <div class="container-xl mt-4 py-3 px-4">
-        <div class="row">{% include 'ticket.html' %}</div>
+        <div class="row">{% include 'ticket_check.html' %}</div>
       </div>
     </section>
   </div>

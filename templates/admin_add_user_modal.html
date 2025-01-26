@@ -1,0 +1,42 @@
+<div id="addUserModal" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Dodaj nowego użytkownika</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addUserForm">
+                    <div class="mb-3">
+                        <label for="addName" class="form-label">Imię</label>
+                        <input type="text" class="form-control" id="addName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="addSurname" class="form-label">Nazwisko</label>
+                        <input type="text" class="form-control" id="addSurname">
+                    </div>
+                    <div class="mb-3">
+                        <label for="addUsername" class="form-label">Login</label>
+                        <input type="text" class="form-control" id="addUsername">
+                    </div>
+                    <div class="mb-3">
+                        <label for="addEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="addEmail">
+                    </div>
+                    <div class="mb-3">
+                        <label for="addRole" class="form-label">Rola</label>
+                        <select class="form-control form-select" id="addRole">
+                            <option value="pasażer">Admin</option>
+                            <option value="kontroler">Kontroler</option>
+                            <option value="admin">Pasażer</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
+                <button type="button" class="btn btn-primary" id="saveNewUser">Dodaj użytkownika</button>
+            </div>
+        </div>
+    </div>
+</div>
