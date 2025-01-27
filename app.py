@@ -2,6 +2,10 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify, f
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from werkzeug.security import generate_password_hash
+from datetime import datetime, timedelta
+import random
+import string
+import re
 
 app = Flask(__name__)
 app.config['MAIL_SERVER'] = 'smtp-relay.gmail.com' # Póki co niekatywne, ponieważ musze założyć najpierw skrzynkę, ogarnę przy następnej aktualizacji
@@ -11,6 +15,7 @@ app.config['MAIL_USERNAME'] = 'portal.pasazera.kmk@gmail.com'
 app.config['MAIL_PASSWORD'] = 'hasło' # Trzeba podać hasło do skrzynki
 mail = Mail(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///default.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'supersecretkey'
 app.config['SQLALCHEMY_BINDS'] = {
     'users': 'sqlite:///users.db',
@@ -35,12 +40,11 @@ class User(db.Model):
 class Ticket(db.Model):
     __bind_key__ = 'tickets'
     id = db.Column(db.Integer, primary_key=True)
-    token = db.Column(db.String(15), unique=True, nullable=False)
-    validation = db.Column(db.String(50), nullable=False)
+    token = db.Column(db.String(10), unique=True, nullable=False)
+    validation = db.Column(db.DateTime, nullable=False)
     time = db.Column(db.String(10), nullable=False)
     tariff = db.Column(db.String(10), nullable=False)
     zone = db.Column(db.String(10), nullable=False)
-    price = db.Column(db.String(10), nullable=False)
     description = db.Column(db.String(150), nullable=False)
 
     def __repr__(self):
@@ -57,6 +61,23 @@ class TicketData(db.Model):
 
     def __repr__(self):
         return f'<Time {self.time}>'
+
+def generate_unique_token():
+    while True:
+        token = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+        if not Ticket.query.filter_by(token=token).first():
+            return token
+
+def parse_time_duration(time_str):
+    match = re.match(r"(\d+)(min|h)", time_str)
+    if match:
+        value, unit = match.groups()
+        value = int(value)
+        if unit == "min":
+            return timedelta(minutes=value)
+        elif unit == "h":
+            return timedelta(hours=value)
+    return None
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -231,13 +252,64 @@ def reset_password(user_id):
 
     return jsonify({'success': True, 'message': 'Hasło zresetowane i wysłane na e-mail.'})
 
+@app.route('/buy_ticket')
+#@app.route('/buy_ticket', methods=['POST'])
+def buy_ticket():
+    #try:
+        validation_time = datetime.now()
+        token = generate_unique_token()
+        time = "20min"
+        tariff = "normal"
+        zone = "all"
+        description = "Bilet normalny 20-minutowy, strefy I+II+III"
+        
+        new_ticket = Ticket(validation=validation_time, token=token, time=time, tariff=tariff, zone=zone, description=description)
+        db.session.add(new_ticket)
+        db.session.commit()
+        return f'Bilet został zapisany.'
+        #return jsonify({"success": True, "message": "Bilet zapisany poprawnie", "token": token})
+    #except Exception as e:
+        #return jsonify({"success": False, "message": str(e)})
+
+#kontrola ważności biletu 
+@app.route('/check_ticket', methods=['GET', 'POST'])
+def check_ticket():
+    if request.method == 'POST':
+        token = request.form.get('token')
+
+        if not token:
+            return jsonify({"success": False, "message": "Proszę podać ID biletu."})
+            #return render_template('pages/controler_ticketCheck.html', message="Proszę podać ID biletu.")
+
+        ticket = Ticket.query.filter_by(token=token).first()
+        if not ticket:
+            return jsonify({"success": False, "message": "Bilet o podanym ID nie istnieje."})
+            #return render_template('pages/controler_ticketCheck.html', message="Bilet o podanym ID nie istnieje.")
+
+        current_time = datetime.now()
+        time_difference = current_time - ticket.validation
+        allowed_time = parse_time_duration(ticket.time)
+
+        if allowed_time:
+            if time_difference <= allowed_time:
+                remaining_time = allowed_time - time_difference
+                return jsonify({"success": True, "message": f"Bilet jest ważny. Pozostało: {remaining_time}."})
+                #return render_template('pages/controler_ticketCheck.html', message=f"Bilet jest ważny. Pozostało: {remaining_time}.")
+            else:
+                return jsonify({"success": True, "message": "Bilet jest nieważny."})
+                #return render_template('pages/controler_ticketCheck.html', message="Bilet jest nieważny.")
+        else:
+            return jsonify({"success": False, "message": "Nieprawidłowy format czasu biletu w bazie."})
+            #return render_template('pages/controler_ticketCheck.html', message="Nieprawidłowy format czasu biletu w bazie.")
+
+    return render_template('pages/controler_ticketCheck.html')
+
 # endpointy tymczasowe do developmentu bazy danych
-@app.route('/add_user')
-def add_user():
-    new_user = User(name='John', surname='Doe', username='bzzzf', password='gula18', role='kontroler', email='email@emafil.com')
-    db.session.add(new_user)
-    db.session.commit()
-    return f'Użytkownik został dodany.'
+@app.route('/tickets')
+def get_tickets():
+    tickets = Ticket.query.all()
+    ticket_list = [f"{ticket.id}: {ticket.token}, v.{ticket.validation}, {ticket.time}, {ticket.tariff}, {ticket.zone}, {ticket.description}" for ticket in tickets]
+    return "<br>".join(ticket_list)
 
 @app.route('/users')
 def get_users():
