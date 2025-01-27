@@ -30,7 +30,9 @@ zone - strefa, w której obowiązuje bilet (all, first)
 price - cena biletu  
 description - opis biletu  
   
-## Kolorystyka:  
+## Kolorystyka
+<img width="1778" alt="Colour Palette" src="https://github.com/user-attachments/assets/627ebd31-ce2a-423e-a22a-083c7237cbfb" />
+
 Granatowy #00305F  
 Ciemny szary #9D9D9C [m.in. nieaktywne przyciski]  
 Jasny szary #E6E6E6 [m.in. tło biletów, tło pól tekstowych, inne tła i elementy dodatkowe]  
