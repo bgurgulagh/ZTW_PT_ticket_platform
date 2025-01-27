@@ -1,6 +1,6 @@
 # Aplikacja webowa do zarządzania biletami KMK
 ## Uruchomienie aplikacji
-python -m venv venv  
+python -m venv .env  
 .\venv\Scripts\activate  
 pip install -r requirements.txt  
 python app.py  
