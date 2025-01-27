@@ -102,7 +102,7 @@ def moje_bilety():
 
 @app.route('/kup_bilet')
 def kup_bilet():
-    return render_template('pages/tickets.html', title='Kup bilety –', header='Kup bilety')
+    return render_template('pages/tickets.html', title='Kup bilet –', header='Kup bilet')
 
 @app.route('/moj_profil')
 def moj_profil():

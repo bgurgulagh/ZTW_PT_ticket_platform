@@ -59,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
       let price = parseFloat(document.getElementById("ticket_price").textContent.replace(",", ".").replace("zł", ""), 10);
       const total = quantity * price;
       console.log(`Kwota do zapłaty: ${total.toFixed(2)} zł`);
+      document.querySelector("#transaction_cost_cost").textContent = total.toFixed(2).replace(".", ",") + "zł";
   };
 
   // Reakcja na przyciski

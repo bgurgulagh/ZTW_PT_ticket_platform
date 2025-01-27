@@ -41,6 +41,55 @@ body {
     background-color: #00305F;
 }
 
+#buy_tickets_header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#transaction_cost {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#transaction_cost_label {
+    font-size: 20px;
+}
+
+#transaction_cost_cost {
+    font-size: 40px;
+    font-weight: 700;
+}
+
+#btn_transaction_confirm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #65A930;
+    width: 100%;
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+#ticket_buy_summary {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 15px;
+    gap: 30px;
+    width: 600px;
+    height: 100px;
+    background-color: #E6E6E6;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
 .btn-primary {
     background-color: #00305F;
     border-color: #00305F;
@@ -83,18 +132,16 @@ form .form-control {
 }
 /* koniec login */
 
-/* przykładowy tickets.html */
 #tickets .ticket {
     background-color: #E6E6E6;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    margin-bottom: 20px;
 }
 
 #tickets .ticket-header {
     font-size: 1.5rem;
-    font-weight: bold;
+    font-weight: 700;
     color: #00305F;
 }
 
@@ -102,4 +149,3 @@ form .form-control {
     font-size: 1.1rem;
     color: #9D9D9C;
 }
-/* koniec przykładowy tickets.html */
