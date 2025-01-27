@@ -1,28 +1,30 @@
 $(document).ready(function () {
-    $("form").on("submit", function (event) {
-      event.preventDefault();
-      let ticketToken = $("#ticket-id-number").val().trim();
+  $("form").on("submit", function (event) {
+    event.preventDefault();
+    let ticketToken = $("#ticket-id-number").val().trim();
+    console.log("Wprowadzony token:", ticketToken);
 
-      if (ticketToken === "") {
+    if (ticketToken === "") {
         alert("Proszę wpisać numer ID biletu.");
         return;
-      }
+    }
 
-      $.ajax({
+    $.ajax({
         url: "/check_ticket",
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify({ token: ticketToken }),
         success: function (response) {
-          if (response.success) {
-            alert("Status biletu: " + response.message);
-          } else {
-            alert(response.error);
-          }
+            console.log("Odpowiedź serwera:", response);
+            if (response.success) {
+                alert("Status biletu: " + response.message);
+            } else {
+                alert(response.message);
+            }
         },
         error: function () {
-          alert("Wystąpił problem podczas sprawdzania biletu.");
+            alert("Wystąpił problem podczas sprawdzania biletu.");
         },
-      });
     });
+  });
 });

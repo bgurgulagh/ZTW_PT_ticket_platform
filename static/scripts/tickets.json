@@ -106,8 +106,8 @@
     },
     "ticket_72h_discount_all": {
       "time": "72h",
-      "tariff": "tariff_discount.svg",
-      "zone": "zone_all.svg",
+      "tariff": "discount",
+      "zone": "all",
       "price": "25,00",
       "description": "Bilet ulgowy 72-godzinny, strefy I+II+III"
     },

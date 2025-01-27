@@ -40,6 +40,7 @@ class User(db.Model):
 class Ticket(db.Model):
     __bind_key__ = 'tickets'
     id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), nullable=False)
     token = db.Column(db.String(10), unique=True, nullable=False)
     validation = db.Column(db.DateTime, nullable=False)
     time = db.Column(db.String(10), nullable=False)
@@ -62,13 +63,15 @@ class TicketData(db.Model):
     def __repr__(self):
         return f'<Time {self.time}>'
 
+# Generowanie tokentów do zakupu biletów
 def generate_unique_token():
     while True:
         token = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
         if not Ticket.query.filter_by(token=token).first():
             return token
 
-def parse_time_duration(time_str):
+# Przekształcanie czasu do sprawdzania ważności bieltów
+def parse_time(time_str):
     match = re.match(r"(\d+)(min|h)", time_str)
     if match:
         value, unit = match.groups()
@@ -122,6 +125,7 @@ def admin_users():
     users = User.query.all()
     return render_template('pages/admin_userBase.html', title='Użytkownicy –', header='Użytkownicy', users=users)
 
+# Usunięcie użytkownika w panelu admina
 @app.route('/delete_user_ajax/<int:user_id>', methods=['DELETE'])
 def delete_user_ajax(user_id):
     user = User.query.get(user_id)
@@ -133,6 +137,7 @@ def delete_user_ajax(user_id):
     else:
         return jsonify({"success": False, "error": "Użytkownik nie istnieje"}), 404
 
+# Edycja danych użytkownika w panelu admina
 @app.route('/update_user_ajax/<int:user_id>', methods=['POST'])
 def update_user_ajax(user_id):
     user = User.query.get(user_id)
@@ -149,6 +154,7 @@ def update_user_ajax(user_id):
     db.session.commit()
     return jsonify({"success": True})
 
+# Dodanie nowego użytkownika w panelu admina
 @app.route('/add_user_ajax', methods=['POST'])
 def add_user_ajax():
     data = request.get_json()
@@ -168,6 +174,7 @@ def add_user_ajax():
         db.session.rollback()
         return jsonify({"success": False, "error": str(e)})
 
+# Rejestracja nowego użytkownika
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -200,6 +207,7 @@ def signup():
 
     return render_template('signup.html')
 
+# Filtrowanie rekordów w panelu admina
 @app.route('/filter_users', methods=['GET'])
 def filter_users():
     name = request.args.get('name', '')
@@ -231,6 +239,7 @@ def filter_users():
     ]
     return jsonify(users_data)
 
+# Resetowanie hasła - request admina
 @app.route('/reset_password/<int:user_id>', methods=['POST'])
 def reset_password(user_id):
     user = User.query.get(user_id)
@@ -252,18 +261,20 @@ def reset_password(user_id):
 
     return jsonify({'success': True, 'message': 'Hasło zresetowane i wysłane na e-mail.'})
 
+# Kupowanie biletów
 @app.route('/buy_ticket')
 #@app.route('/buy_ticket', methods=['POST'])
 def buy_ticket():
     #try:
         validation_time = datetime.now()
         token = generate_unique_token()
+        username = "bgurgul"
         time = "20min"
         tariff = "normal"
         zone = "all"
         description = "Bilet normalny 20-minutowy, strefy I+II+III"
         
-        new_ticket = Ticket(validation=validation_time, token=token, time=time, tariff=tariff, zone=zone, description=description)
+        new_ticket = Ticket(validation=validation_time, token=token, username=username, time=time, tariff=tariff, zone=zone, description=description)
         db.session.add(new_ticket)
         db.session.commit()
         return f'Bilet został zapisany.'
@@ -271,44 +282,40 @@ def buy_ticket():
     #except Exception as e:
         #return jsonify({"success": False, "message": str(e)})
 
-#kontrola ważności biletu 
-@app.route('/check_ticket', methods=['GET', 'POST'])
+# Kontrola biletów
+@app.route('/check_ticket', methods=['POST'])
 def check_ticket():
-    if request.method == 'POST':
-        token = request.form.get('token')
+    data = request.get_json()
+    token = data.get('token')
 
-        if not token:
-            return jsonify({"success": False, "message": "Proszę podać ID biletu."})
-            #return render_template('pages/controler_ticketCheck.html', message="Proszę podać ID biletu.")
+    if not token:
+        return jsonify({"success": False, "message": "Proszę podać ID biletu."})
 
-        ticket = Ticket.query.filter_by(token=token).first()
-        if not ticket:
-            return jsonify({"success": False, "message": "Bilet o podanym ID nie istnieje."})
-            #return render_template('pages/controler_ticketCheck.html', message="Bilet o podanym ID nie istnieje.")
+    ticket = Ticket.query.filter_by(token=token).first()
+    if not ticket:
+        return jsonify({"success": False, "message": "Bilet nie istnieje."})
 
-        current_time = datetime.now()
-        time_difference = current_time - ticket.validation
-        allowed_time = parse_time_duration(ticket.time)
+    current_time = datetime.now()
+    time_difference = current_time - ticket.validation
+    allowed_duration = parse_time(ticket.time)
 
-        if allowed_time:
-            if time_difference <= allowed_time:
-                remaining_time = allowed_time - time_difference
-                return jsonify({"success": True, "message": f"Bilet jest ważny. Pozostało: {remaining_time}."})
-                #return render_template('pages/controler_ticketCheck.html', message=f"Bilet jest ważny. Pozostało: {remaining_time}.")
-            else:
-                return jsonify({"success": True, "message": "Bilet jest nieważny."})
-                #return render_template('pages/controler_ticketCheck.html', message="Bilet jest nieważny.")
-        else:
-            return jsonify({"success": False, "message": "Nieprawidłowy format czasu biletu w bazie."})
-            #return render_template('pages/controler_ticketCheck.html', message="Nieprawidłowy format czasu biletu w bazie.")
-
-    return render_template('pages/controler_ticketCheck.html')
+    if allowed_duration and time_difference <= allowed_duration:
+        remaining_time = (allowed_duration - time_difference).total_seconds() // 60
+        return jsonify({"success": True, "message": f"Bilet jest ważny, pozostało {int(remaining_time)} minut."})
+    else:
+        return jsonify({"success": False, "message": "Bilet jest nieważny."})
 
 # endpointy tymczasowe do developmentu bazy danych
 @app.route('/tickets')
 def get_tickets():
     tickets = Ticket.query.all()
-    ticket_list = [f"{ticket.id}: {ticket.token}, v.{ticket.validation}, {ticket.time}, {ticket.tariff}, {ticket.zone}, {ticket.description}" for ticket in tickets]
+    ticket_list = [f"{ticket.id}: {ticket.username}, {ticket.token}, v.{ticket.validation}, {ticket.time}, {ticket.tariff}, {ticket.zone}, {ticket.description}" for ticket in tickets]
+    return "<br>".join(ticket_list)
+
+@app.route('/ticketsdata')
+def ticketsdata():
+    tickets = TicketData.query.all()
+    ticket_list = [f"{ticket.id}: {ticket.time}, {ticket.tariff}, {ticket.zone}, {ticket.price}, {ticket.description}" for ticket in tickets]
     return "<br>".join(ticket_list)
 
 @app.route('/users')
@@ -316,7 +323,21 @@ def get_users():
     users = User.query.all()
     user_list = [f"{user.id}: {user.name} {user.surname}, l.{user.username}, h.{user.password}, {user.role} ({user.email})" for user in users]
     return "<br>".join(user_list)
-# koniec tymczasowych endpointów
+
+#@app.route('/add_ticket')
+def add_ticket():
+        time = "7day"
+        tariff = "discount"
+        zone = "all"
+        price = "34,00"
+        description = "Bilet ulgowy 7-dniowy, strefy I+II+III"
+        
+        new_ticket = TicketData(time=time, tariff=tariff, zone=zone, price=price, description=description)
+        db.session.add(new_ticket)
+        db.session.commit()
+        return f'Bilet został dodany.'
+
+# koniec endpointów tymczasowych
 
 if __name__ == '__main__':
     with app.app_context():
