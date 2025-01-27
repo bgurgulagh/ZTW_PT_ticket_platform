@@ -16,17 +16,13 @@
     </nav>
 
     <!-- Wyświetlanie powiadomień z systemu -->
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <div class="container mt-3">
-          {% for message in messages %}
-            <div class="alert alert-info" role="alert">
-              {{ message }}
-            </div>
-          {% endfor %}
-        </div>
-      {% endif %}
-    {% endwith %}
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <div class="container mt-3">
+      {% for message in messages %}
+      <div class="alert alert-info" role="alert">{{ message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %} {% endwith %}
 
     <!-- Login -->
     <section id="login">
@@ -40,7 +36,8 @@
             <form method="POST" action="{{ url_for('login') }}">
               <div class="mb-3">
                 <label for="username" class="form-label"
-                  >Nazwa użytkownika</label>
+                  >Nazwa użytkownika</label
+                >
                 <input
                   type="text"
                   class="form-control"

@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
 import random
 import string
 import re
+from datetime import timedelta
 
 app = Flask(__name__)
 app.config['MAIL_SERVER'] = 'smtp-relay.gmail.com' # Póki co niekatywne, ponieważ musze założyć najpierw skrzynkę, ogarnę przy następnej aktualizacji
@@ -23,6 +24,8 @@ app.config['SQLALCHEMY_BINDS'] = {
     'tickets_data': 'sqlite:///tickets_data.db'
 }
 db = SQLAlchemy(app)
+app.config['SESSION_PERMANENT'] = True
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)  # Sesja ważna przez 60 minut
 
 class User(db.Model):
     __bind_key__ = 'users'
@@ -82,23 +85,98 @@ def parse_time(time_str):
             return timedelta(hours=value)
     return None
 
+def redirect_based_on_role(role):
+    if role == "admin":
+        return redirect(url_for('admin_users'))
+    elif role == "pasażer":
+        return redirect(url_for('moje_bilety'))
+        return render_template('pages/tickets_check.html', title='Moje bilety –', header='Moje bilety')
+    elif role == "kontroler ":
+        return redirect(url_for('kontrola'))
+    else:
+        return redirect(url_for('login'))
+    
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        # Weryfikacja danych logowania
+        user = User.query.filter_by(username=username).first()
 
-        # Logika do weryfikacji danych logowania
-        if username == "admin" and password == "admin":  # Przykładowa walidacja
-            return redirect(url_for('moje_bilety'))  # Po zalogowaniu przekierowanie do strony głównej
+        if user and check_password_hash(user.password, password):
+            # Zapisz dane użytkownika w sesji
+            session['user_id'] = user.id
+            session['username'] = user.username
+            session['role'] = user.role
+            session.permanent = True  # Sesja wygaśnie po pewnym czasie bezczynności
+            print(f"Użytkownik {user.username} zalogowany z rolą: {user.role}")
+
+            # Przekierowanie na podstawie roli
+            return redirect_based_on_role(user.role)
         else:
+            print(f"Nieudane logowanie dla użytkownika: {username}")
             return render_template('login.html', error='Nieprawidłowe dane logowania')
-    
-    return render_template('login.html', error=None)
+        # return redirect(url_for('moje_bilety'))
+    else:
+        # Gdy żądanie jest GET, po prostu renderuj stronę logowania
+        return render_template('login.html', error=None)
+
+
+
+@app.route('/logout')
+def logout():
+    # Czyszczenie sesji użytkownika
+    session.clear()
+    flash("Zostałeś wylogowany.", "info")
+    return redirect(url_for('login'))
+
+# Dodaj dekorator do weryfikacji roli (opcjonalne)
+from functools import wraps
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            flash("Zaloguj się, aby uzyskać dostęp do tej strony.", "warning")
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+def role_required(role):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if session.get('role') != role:
+                flash("Nie masz uprawnień do tej strony.", "danger")
+                return redirect(url_for('login'))
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
+
+# Przykłady wykorzystania dekoratorów:
+@app.route('/admin_users')
+@login_required
+@role_required('admin')
+def admin_users():
+    users = User.query.all()
+    return render_template('pages/admin_userBase.html', title='Użytkownicy –', header='Użytkownicy', users=users)
 
 @app.route('/moje_bilety')
+# @login_required
+# @role_required('user')
 def moje_bilety():
     return render_template('pages/tickets_check.html', title='Moje bilety –', header='Moje bilety')
+
+@app.route('/kontrola')
+@login_required
+@role_required('controller')
+def kontrola():
+    return render_template('pages/controler_ticketCheck.html', title='Kontrola –', header='Kontrola biletów')
+
+# @app.route('/moje_bilety')
+# def moje_bilety():
+#     return render_template('pages/tickets_check.html', title='Moje bilety –', header='Moje bilety')
 
 @app.route('/kup_bilet')
 def kup_bilet():
@@ -112,18 +190,18 @@ def moj_profil():
 def profil_kontrolera():
     return render_template('pages/controler_noEdit.html', title='Profil kontrolera –', header='Mój profil')
 
-@app.route('/kontrola')
-def kontrola():
-    return render_template('pages/controler_ticketCheck.html', title='Kontrola –', header='Kontrola biletów')
+# @app.route('/kontrola')
+# def kontrola():
+#     return render_template('pages/controler_ticketCheck.html', title='Kontrola –', header='Kontrola biletów')
 
 @app.route('/rejestracja')
 def rejestracja():
     return render_template('signup.html')
 
-@app.route('/admin_users')
-def admin_users():
-    users = User.query.all()
-    return render_template('pages/admin_userBase.html', title='Użytkownicy –', header='Użytkownicy', users=users)
+# @app.route('/admin_users')
+# def admin_users():
+#     users = User.query.all()
+#     return render_template('pages/admin_userBase.html', title='Użytkownicy –', header='Użytkownicy', users=users)
 
 # Usunięcie użytkownika w panelu admina
 @app.route('/delete_user_ajax/<int:user_id>', methods=['DELETE'])
