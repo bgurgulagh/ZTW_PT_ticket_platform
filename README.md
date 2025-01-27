@@ -36,3 +36,8 @@ Ciemny szary #9D9D9C [m.in. nieaktywne przyciski]
 Jasny szary #E6E6E6 [m.in. tło biletów, tło pól tekstowych, inne tła i elementy dodatkowe]  
 Zielony #65A930 [m.in. potwierdzenie płatności, przycisk do kupowania biletów gdy aktywny]  
 Czerwony #E00726 [m.in. błędy, ostrzeżenia]  
+
+## Architektura informacji
+<img width="2404" alt="Information Architecture" src="https://github.com/user-attachments/assets/358b0c81-ddc6-4edb-95e9-1472a80e0897" />
+
+
