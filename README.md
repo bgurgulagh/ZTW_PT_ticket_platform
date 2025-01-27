@@ -40,7 +40,9 @@ Zielony #65A930 [m.in. potwierdzenie płatności, przycisk do kupowania biletów
 Czerwony #E00726 [m.in. błędy, ostrzeżenia]  
 
 ## Architektura informacji
-<img width="2120" alt="Information Architecture v2" src="https://github.com/user-attachments/assets/99fc1136-80b0-4be7-b100-d8d1a81e5ac6" />
+<img width="2120" alt="Information Architecture v4" src="https://github.com/user-attachments/assets/b160c3d2-afd7-4054-af92-1114f6584587" />
+
+
 
 
 
