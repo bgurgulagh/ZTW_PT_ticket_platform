@@ -6,7 +6,6 @@ from datetime import datetime, timedelta
 import random
 import string
 import re
-from datetime import timedelta
 
 app = Flask(__name__)
 app.config['MAIL_SERVER'] = 'smtp-relay.gmail.com' # Póki co niekatywne, ponieważ musze założyć najpierw skrzynkę, ogarnę przy następnej aktualizacji
@@ -15,6 +14,8 @@ app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'portal.pasazera.kmk@gmail.com'
 app.config['MAIL_PASSWORD'] = 'hasło' # Trzeba podać hasło do skrzynki
 mail = Mail(app)
+app.config['SESSION_PERMANENT'] = True
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)  # Sesja ważna przez 60 minut
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///default.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'supersecretkey'
@@ -24,8 +25,6 @@ app.config['SQLALCHEMY_BINDS'] = {
     'tickets_data': 'sqlite:///tickets_data.db'
 }
 db = SQLAlchemy(app)
-app.config['SESSION_PERMANENT'] = True
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)  # Sesja ważna przez 60 minut
 
 class User(db.Model):
     __bind_key__ = 'users'
@@ -85,6 +84,7 @@ def parse_time(time_str):
             return timedelta(hours=value)
     return None
 
+# Logika logowania do odpowiedniej roli
 def redirect_based_on_role(role):
     if role == "admin":
         return redirect(url_for('admin_users'))
@@ -95,15 +95,15 @@ def redirect_based_on_role(role):
         return redirect(url_for('kontrola'))
     else:
         return redirect(url_for('login'))
-    
+
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+
         # Weryfikacja danych logowania
         user = User.query.filter_by(username=username).first()
-
         if user and check_password_hash(user.password, password):
             # Zapisz dane użytkownika w sesji
             session['user_id'] = user.id
@@ -111,7 +111,6 @@ def login():
             session['role'] = user.role
             session.permanent = True  # Sesja wygaśnie po pewnym czasie bezczynności
             print(f"Użytkownik {user.username} zalogowany z rolą: {user.role}")
-
             # Przekierowanie na podstawie roli
             return redirect_based_on_role(user.role)
         else:
@@ -121,8 +120,6 @@ def login():
     else:
         # Gdy żądanie jest GET, po prostu renderuj stronę logowania
         return render_template('login.html', error=None)
-
-
 
 @app.route('/logout')
 def logout():
@@ -168,16 +165,6 @@ def admin_users():
 def moje_bilety():
     return render_template('pages/tickets_check.html', title='Moje bilety –', header='Moje bilety')
 
-@app.route('/kontrola')
-@login_required
-@role_required('controller')
-def kontrola():
-    return render_template('pages/controler_ticketCheck.html', title='Kontrola –', header='Kontrola biletów')
-
-# @app.route('/moje_bilety')
-# def moje_bilety():
-#     return render_template('pages/tickets_check.html', title='Moje bilety –', header='Moje bilety')
-
 @app.route('/kup_bilet')
 def kup_bilet():
     return render_template('pages/tickets.html', title='Kup bilet –', header='Kup bilet')
@@ -190,18 +177,20 @@ def moj_profil():
 def profil_kontrolera():
     return render_template('pages/controler_noEdit.html', title='Profil kontrolera –', header='Mój profil')
 
-# @app.route('/kontrola')
-# def kontrola():
-#     return render_template('pages/controler_ticketCheck.html', title='Kontrola –', header='Kontrola biletów')
+@app.route('/kontrola')
+@login_required
+@role_required('controller')
+def kontrola():
+    return render_template('pages/controler_ticketCheck.html', title='Kontrola –', header='Kontrola biletów')
 
 @app.route('/rejestracja')
 def rejestracja():
     return render_template('signup.html')
 
-# @app.route('/admin_users')
-# def admin_users():
-#     users = User.query.all()
-#     return render_template('pages/admin_userBase.html', title='Użytkownicy –', header='Użytkownicy', users=users)
+@app.route('/admin_uzytkownicy')
+def admin_uzytkownicy():
+    users = User.query.all()
+    return render_template('pages/admin_userBase.html', title='Użytkownicy –', header='Użytkownicy', users=users)
 
 # Usunięcie użytkownika w panelu admina
 @app.route('/delete_user_ajax/<int:user_id>', methods=['DELETE'])
@@ -339,6 +328,27 @@ def reset_password(user_id):
 
     return jsonify({'success': True, 'message': 'Hasło zresetowane i wysłane na e-mail.'})
 
+# Przekazywanie temaplate biletów
+@app.route('/get_ticket_template')
+def get_ticket_template():
+    return render_template('ticket.html')
+
+# Wczytywanie biletów
+@app.route('/get_tickets')
+def get_tickets():
+    tickets = TicketData.query.all()
+    tickets_list = [
+        {
+            'id': ticket.id,
+            'time': ticket.time,
+            'tariff': ticket.tariff,
+            'zone': ticket.zone,
+            'price': ticket.price,
+            'description': ticket.description
+        } for ticket in tickets
+    ]
+    return jsonify(tickets_list)
+
 # Kupowanie biletów
 @app.route('/buy_ticket')
 #@app.route('/buy_ticket', methods=['POST'])
@@ -385,7 +395,7 @@ def check_ticket():
 
 # endpointy tymczasowe do developmentu bazy danych
 @app.route('/tickets')
-def get_tickets():
+def inspect_tickets():
     tickets = Ticket.query.all()
     ticket_list = [f"{ticket.id}: {ticket.username}, {ticket.token}, v.{ticket.validation}, {ticket.time}, {ticket.tariff}, {ticket.zone}, {ticket.description}" for ticket in tickets]
     return "<br>".join(ticket_list)

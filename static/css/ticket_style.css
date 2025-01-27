@@ -111,6 +111,12 @@ p {
     width: 100%;
 }
 
+#ticket_description_section {
+    display: flex;
+    height: 50px;
+    align-items: center;
+}
+
 #divider {
     background-color: #00305F;
     height: 1.5px;
