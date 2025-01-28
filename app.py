@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, flash, session
+from flask import Flask, render_template, request, redirect, url_for, jsonify, flash, session, g
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -6,7 +6,6 @@ from datetime import datetime, timedelta
 import random
 import string
 import re
-from flask import g 
 
 app = Flask(__name__)
 app.config['MAIL_SERVER'] = 'smtp-relay.gmail.com' # Póki co niekatywne, ponieważ musze założyć najpierw skrzynkę, ogarnę przy następnej aktualizacji
@@ -88,11 +87,11 @@ def parse_time(time_str):
 # Logika logowania do odpowiedniej roli
 def redirect_based_on_role(role):
     if role == "admin":
-        return redirect(url_for('admin_users'))
+        return redirect(url_for('admin_uzytkownicy'))
     elif role == "pasażer":
-        return redirect(url_for('moje_bilety'))
+        return redirect(url_for('bilety'))
     elif role == "kontroler":
-        return redirect(url_for('kontrola'))
+        return redirect(url_for('kontroler_kontrola'))
     else:
         return redirect(url_for('login'))
 
@@ -136,7 +135,6 @@ def logout():
     flash("Zostałeś wylogowany.", "info")
     return redirect(url_for('login'))
 
-# Dodaj dekorator do weryfikacji roli (opcjonalne)
 from functools import wraps
 
 def login_required(f):
@@ -159,46 +157,44 @@ def role_required(role):
         return decorated_function
     return decorator
 
-# Przykłady wykorzystania dekoratorów:
-@app.route('/admin_users')
-@login_required
-@role_required('admin')
-def admin_users():
-    users = User.query.all()
-    return render_template('pages/admin_userBase.html', title='Użytkownicy –', header='Użytkownicy', users=users, gUser=g.user)
-
-@app.route('/moje_bilety')
-@login_required
-@role_required('pasażer')
-def moje_bilety():
-    return render_template('pages/tickets_check.html', title='Moje bilety –', header='Moje bilety', gUser=g.user)
-
-@app.route('/kup_bilet')
-def kup_bilet():
-    return render_template('pages/tickets.html', title='Kup bilet –', header='Kup bilet', gUser=g.user)
-
-@app.route('/moj_profil')
-def moj_profil():
-    return render_template('pages/profile_user.html', title='Mój profil –', header='Mój profil', gUser=g.user)
-
-@app.route('/profil_kontrolera')
-def profil_kontrolera():
-    return render_template('pages/controler_noEdit.html', title='Profil kontrolera –', header='Mój profil' , gUser=g.user)
-
-@app.route('/kontrola')
-@login_required
-@role_required('kontroler')
-def kontrola():
-    return render_template('pages/controler_ticketCheck.html', title='Kontrola –', header='Kontrola biletów' , gUser=g.user)
-
 @app.route('/rejestracja')
 def rejestracja():
     return render_template('signup.html' , gUser=g.user)
 
-@app.route('/admin_uzytkownicy')
+@app.route('/profil')
+def profil():
+    return render_template('pages/profile_user.html', title='Mój profil –', header='Mój profil', gUser=g.user)
+
+@app.route('/admin/uzytkownicy')
+@login_required
+@role_required('admin')
 def admin_uzytkownicy():
     users = User.query.all()
-    return render_template('pages/admin_userBase.html', title='Użytkownicy –', header='Użytkownicy', users=users)
+    return render_template('pages/admin_userBase.html', title='Użytkownicy –', header='Użytkownicy', users=users, gUser=g.user)
+
+@app.route('/bilety')
+@login_required
+@role_required('pasażer')
+def bilety():
+    return render_template('pages/tickets_check.html', title='Moje bilety –', header='Moje bilety', gUser=g.user)
+
+@app.route('/bilety/sklep')
+@login_required
+@role_required('pasażer')
+def bilety_sklep():
+    return render_template('pages/tickets.html', title='Kup bilet –', header='Kup bilet', gUser=g.user)
+
+@app.route('/kontroler/profil')
+@login_required
+@role_required('kontroler')
+def kontroler_profil():
+    return render_template('pages/controler_noEdit.html', title='Profil kontrolera –', header='Mój profil' , gUser=g.user)
+
+@app.route('/kontroler/kontrola')
+@login_required
+@role_required('kontroler')
+def kontroler_kontrola():
+    return render_template('pages/controler_ticketCheck.html', title='Kontrola –', header='Kontrola biletów' , gUser=g.user)
 
 # Usunięcie użytkownika w panelu admina
 @app.route('/delete_user_ajax/<int:user_id>', methods=['DELETE'])
@@ -341,6 +337,11 @@ def reset_password(user_id):
 def get_ticket_template():
     return render_template('ticket.html')
 
+# Przekazywanie temaplate biletów do sprawdzania pozostałego czasu
+@app.route('/get_ticket_check_template')
+def get_ticket_check_template():
+    return render_template('ticket_check.html')
+
 # Wczytywanie biletów
 @app.route('/get_tickets')
 def get_tickets():
@@ -358,25 +359,83 @@ def get_tickets():
     return jsonify(tickets_list)
 
 # Kupowanie biletów
-@app.route('/buy_ticket')
-#@app.route('/buy_ticket', methods=['POST'])
+@app.route('/buy_ticket', methods=['POST'])
 def buy_ticket():
-    #try:
+    try:
+        tickets = request.json
+        if not tickets:
+            return jsonify({"success": False, "message": "Brak danych do zapisania"}), 400
+
         validation_time = datetime.now()
-        token = generate_unique_token()
-        username = "bgurgul"
-        time = "20min"
-        tariff = "normal"
-        zone = "all"
-        description = "Bilet normalny 20-minutowy, strefy I+II+III"
-        
-        new_ticket = Ticket(validation=validation_time, token=token, username=username, time=time, tariff=tariff, zone=zone, description=description)
-        db.session.add(new_ticket)
+        username = g.user.username
+
+        new_tickets = []
+        for ticket in tickets:
+            token = generate_unique_token()
+            new_ticket = Ticket(
+                validation=validation_time,
+                token=token,
+                username=username,
+                time=ticket['time'],
+                tariff=ticket['tariff'],
+                zone=ticket['zone'],
+                description=ticket['description']
+            )
+            new_tickets.append(new_ticket)
+
+        db.session.add_all(new_tickets)
         db.session.commit()
-        return f'Bilet został zapisany.'
-        #return jsonify({"success": True, "message": "Bilet zapisany poprawnie", "token": token})
-    #except Exception as e:
-        #return jsonify({"success": False, "message": str(e)})
+
+        return jsonify({"success": True, "message": f"Zapisano {len(new_tickets)} biletów"}), 200
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+# Sprawdzanie zakupionych biletów
+@app.route('/get_user_tickets')
+def get_user_tickets():
+    username = g.user.username
+    tickets = Ticket.query.filter_by(username=username).all()
+
+    ticket_data = []
+    current_time = datetime.now()
+
+    for ticket in tickets:
+        validation_time = ticket.validation
+        allowed_duration = parse_time(ticket.time)
+        remaining_time = ""
+        is_valid = False
+
+        if allowed_duration:
+            time_diff = allowed_duration - (current_time - validation_time)
+            if time_diff.total_seconds() > 0:
+                is_valid = True
+                days, rem = divmod(time_diff.total_seconds(), 86400)
+                hours, rem = divmod(rem, 3600)
+                minutes = rem // 60
+
+                if days >= 2:
+                    remaining_time = f"{int(days)} dni, {int(hours)} h {int(minutes)} min"
+                elif days >= 1:
+                    remaining_time = f"{int(days)} dzień, {int(hours)} h {int(minutes)} min"
+                elif hours >= 1:
+                    remaining_time = f"{int(hours)} h {int(minutes)} min"
+                else:
+                    remaining_time = f"{int(minutes)} min"
+
+        buy_time = validation_time.strftime("%d.%m.%Y %H:%M")
+
+        ticket_data.append({
+            "id": ticket.id,
+            "time": ticket.time,
+            "tariff": ticket.tariff,
+            "zone": ticket.zone,
+            "description": ticket.description,
+            "buy_time": buy_time,
+            "remaining_time": remaining_time,
+            "is_valid": is_valid
+        })
+
+    return jsonify(ticket_data)
 
 # Kontrola biletów
 @app.route('/check_ticket', methods=['POST'])
@@ -396,8 +455,23 @@ def check_ticket():
     allowed_duration = parse_time(ticket.time)
 
     if allowed_duration and time_difference <= allowed_duration:
-        remaining_time = (allowed_duration - time_difference).total_seconds() // 60
-        return jsonify({"success": True, "message": f"Bilet jest ważny, pozostało {int(remaining_time)} minut."})
+        remaining_time = allowed_duration - time_difference
+
+        # Oblicz dni, godziny i minuty
+        remaining_days = remaining_time.days
+        remaining_seconds = remaining_time.seconds
+        remaining_hours = remaining_seconds // 3600
+        remaining_minutes = (remaining_seconds % 3600) // 60
+
+        # Tworzenie komunikatu
+        if remaining_days > 0:
+            message = f"Bilet jest ważny, pozostało {remaining_days} dni, {remaining_hours} godzin i {remaining_minutes} minut."
+        elif remaining_hours > 0:
+            message = f"Bilet jest ważny, pozostało {remaining_hours} godzin i {remaining_minutes} minut."
+        else:
+            message = f"Bilet jest ważny, pozostało {remaining_minutes} minut."
+
+        return jsonify({"success": True, "message": message})
     else:
         return jsonify({"success": False, "message": "Bilet jest nieważny."})
 
@@ -419,6 +493,21 @@ def get_users():
     users = User.query.all()
     user_list = [f"{user.id}: {user.name} {user.surname}, l.{user.username}, h.{user.password}, {user.role} ({user.email})" for user in users]
     return "<br>".join(user_list)
+
+@app.route('/ticket_buy')
+def ticket_buy():
+    validation_time = datetime.now()
+    token = generate_unique_token()
+    username = "bgurgul"
+    time = "20min"
+    tariff = "normal"
+    zone = "all"
+    description = "Bilet normalny 20-minutowy, strefy I+II+III"
+    
+    new_ticket = Ticket(validation=validation_time, token=token, username=username, time=time, tariff=tariff, zone=zone, description=description)
+    db.session.add(new_ticket)
+    db.session.commit()
+    return f'Bilet został zapisany.'
 
 #@app.route('/add_ticket')
 def add_ticket():
