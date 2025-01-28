@@ -122,7 +122,7 @@ def login():
             return redirect_based_on_role(user.role)
         else:
             print(f"Nieudane logowanie dla użytkownika: {username}")
-            return render_template('login.html', error='Nieprawidłowe dane logowania')
+            return render_template('login.html', error='Nieprawidłowe dane logowania', gUser=g.user)
         # return redirect(url_for('moje_bilety'))
     else:
         # Gdy żądanie jest GET, po prostu renderuj stronę logowania
@@ -421,8 +421,6 @@ def get_user_tickets():
                     remaining_time = f"{int(hours)} h {int(minutes)} min"
                 else:
                     remaining_time = f"{int(minutes)} min"
-            else:
-                remaining_time = "Nieważny"
 
         buy_time = validation_time.strftime("%d.%m.%Y %H:%M")
 
