@@ -42,7 +42,7 @@ W celu zapewnienia kompleksowości systemu zarządzania biletami, potencjalni u�
 ## Uruchomienie aplikacji
 ```bash
 python -m venv .env  
-.\\.env\Scripts\activate  
+.\.env\Scripts\activate  
 pip install -r requirements.txt  
 python app.py
 ```  
