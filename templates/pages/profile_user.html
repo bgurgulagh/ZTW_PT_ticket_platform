@@ -20,9 +20,11 @@
           <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
               <h3 class="mb-0">{{ gUser.name }} {{ gUser.surname}}</h3>
+              {% if gUser.role != 'kontroler' %}
               <button class="btn btn-light btn-sm">
                 <i class="bi bi-pencil"></i>
               </button>
+              {% endif %}
             </div>
           </div>
           <div class="card-body">
@@ -48,7 +50,6 @@
       </div>
     </section>
   </div>
-
   {% include 'footer.html' %}
 
   <script
@@ -56,5 +57,4 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"
   ></script>
-  <script src="../static/scripts/user.js"></script>
 </body>
