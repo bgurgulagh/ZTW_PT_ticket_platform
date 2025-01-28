@@ -26,16 +26,16 @@ python app.py
 | token | identyfikator zakupionego biletu w systemie (generowany automatycznie przy zakupie biletu), podawany podczas kontroli biletów  |
 | validation | data i godzina zakupu biletu w formacie DateTime  |
 | time | okres ważności zakupionego biletu  |
-| tariff | taryfa zakupionego biletu (normal, discount) | 
-| zone | strefa, w której obowiązuje zakupiony bilet (all, first)  |
+| tariff | taryfa zakupionego biletu (normalny - "normal", ulgowy - "discount") | 
+| zone | strefa, w której obowiązuje zakupiony bilet (wszystkie - "all", pierwsza - "first")  |
 | description | opis zakupionego biletu  |
   
 ### tickets_data.db (w app.py pod klasą TicketData) - zbiór informacji o dostępnych biletach  
 | Atrybut  | Opis |
 | ------------- | ------------- |
 | time | okres ważności biletu  |
-| tariff | taryfa biletu (normal, discount)  |
-| zone | strefa, w której obowiązuje bilet (all, first)  |
+| tariff | taryfa biletu (normalny - "normal", ulgowy - "discount")  |
+| zone | strefa, w której obowiązuje bilet (wszystkie - "all", pierwsza - "first")  |
 | price | cena biletu  |
 | description | opis biletu  |
   
