@@ -337,6 +337,11 @@ def reset_password(user_id):
 def get_ticket_template():
     return render_template('ticket.html')
 
+# Przekazywanie temaplate biletów do sprawdzania pozostałego czasu
+@app.route('/get_ticket_check_template')
+def get_ticket_check_template():
+    return render_template('ticket_check.html')
+
 # Wczytywanie biletów
 @app.route('/get_tickets')
 def get_tickets():
@@ -384,6 +389,53 @@ def buy_ticket():
         return jsonify({"success": True, "message": f"Zapisano {len(new_tickets)} biletów"}), 200
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
+
+# Sprawdzanie zakupionych biletów
+@app.route('/get_user_tickets')
+def get_user_tickets():
+    username = g.user.username
+    tickets = Ticket.query.filter_by(username=username).all()
+
+    ticket_data = []
+    current_time = datetime.now()
+
+    for ticket in tickets:
+        validation_time = ticket.validation
+        allowed_duration = parse_time(ticket.time)
+        remaining_time = ""
+        is_valid = False
+
+        if allowed_duration:
+            time_diff = allowed_duration - (current_time - validation_time)
+            if time_diff.total_seconds() > 0:
+                is_valid = True
+                days, rem = divmod(time_diff.total_seconds(), 86400)
+                hours, rem = divmod(rem, 3600)
+                minutes = rem // 60
+
+                if days >= 2:
+                    remaining_time = f"{int(days)} dni, {int(hours)} h {int(minutes)} min"
+                elif days >= 1:
+                    remaining_time = f"{int(days)} dzień, {int(hours)} h {int(minutes)} min"
+                elif hours >= 1:
+                    remaining_time = f"{int(hours)} h {int(minutes)} min"
+                else:
+                    remaining_time = f"{int(minutes)} min"
+
+        buy_time = validation_time.strftime("%d.%m.%Y %H:%M")
+
+        ticket_data.append({
+            "id": ticket.id,
+            "time": ticket.time,
+            "tariff": ticket.tariff,
+            "zone": ticket.zone,
+            "description": ticket.description,
+            "buy_time": buy_time,
+            "remaining_time": remaining_time,
+            "is_valid": is_valid
+        })
+
+    return jsonify(ticket_data)
 
 # Kontrola biletów
 @app.route('/check_ticket', methods=['POST'])

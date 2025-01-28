@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const ticketContainer = document.getElementById("ticket_container");
 
-    // Funkcja pobierająca dane biletów z API Flask
+    // Funkcja pobierająca dane dostępnych biletów
     async function loadTickets() {
         try {
             const response = await fetch("/get_tickets");
