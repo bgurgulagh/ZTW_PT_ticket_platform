@@ -41,6 +41,12 @@ body {
     background-color: #00305F;
 }
 
+.navbar-nav {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
 #buy_tickets_header {
     display: flex;
     flex-direction: row;
