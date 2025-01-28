@@ -14,7 +14,7 @@ python app.py
 | username | login użytkownika  |
 | password | hasło użytkownika  |
 | email | adres email użytkownika  |
-| role | rola użytkownika w systemie (Administrator, Kontroler, Pasażer)  |
+| role | rola użytkownika w systemie (Administrator - "admin", Kontroler - "kontroler", Pasażer - "pasażer")  |
   
 ### tickets.db (w app.py pod klasą Ticket) - zbiór informacji o kupionych biletach  
 | Atrybut  | Opis |
