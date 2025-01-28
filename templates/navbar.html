@@ -5,7 +5,8 @@
       <img
         src="{{ url_for('static', filename='images/logo.svg') }}"
         width="90"
-        height="auto"/>
+        height="auto"
+      />
     </div>
 
     <button
@@ -15,27 +16,56 @@
       data-bs-target="#main-nav"
       aria-controls="main-nav"
       aria-expanded="false"
-      aria-label="Toggle navigation">
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div
       class="collapse navbar-collapse justify-content-end align-center"
-      id="main-nav">
+      id="main-nav"
+    >
       <ul class="navbar-nav">
+        {% if gUser.role == 'pasażer' %}
         <li class="nav-item">
           <a
             href="/moje_bilety"
             class="nav-link active"
             onload="checkActive(this)"
-            >Moje bilety</a>
+            >Moje bilety</a
+          >
         </li>
 
-        <li class="nav-item" onclick="checkActive(this)">
-          <a href="/kup_bilet" class="nav-link">Kup bilet</a>
+        <li class="nav-item">
+          <a href="/kup_bilet" class="nav-link" onload="checkActive(this)"
+            >Kup bilet</a
+          >
         </li>
-        <li class="nav-item" onload="checkActive(this)">
-          <a href="/moj_profil" class="nav-link">Mój profil</a>
+
+        {% elif gUser.role == 'kontroler' %}
+        <li class="nav-item">
+          <a href="/kontrola" class="nav-link" onload="checkActive(this)"
+            >Kontrola</a
+          >
+        </li>
+
+        {% elif gUser.role == 'admin' %}
+        <li class="nav-item">
+          <a href="/admin_users" class="nav-link" onload="checkActive(this)"
+            >Użytkownicy</a
+          >
+        </li>
+
+        <li class="nav-item">
+          <a href="/bilety" class="nav-link" onload="checkActive(this)"
+            >Bilety</a
+          >
+        </li>
+        {% endif %}
+        <li class="nav-item">
+          <a href="/moj_profil" class="nav-link" onload="checkActive(this)"
+            >Mój profil</a
+          >
         </li>
       </ul>
     </div>
@@ -43,14 +73,10 @@
 </nav>
 
 <!-- Wyświetlanie powiadomień z systemu -->
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <div class="container mt-3">
-      {% for message in messages %}
-        <div class="alert alert-info" role="alert">
-          {{ message }}
-        </div>
-      {% endfor %}
-    </div>
-  {% endif %}
-{% endwith %}
+{% with messages = get_flashed_messages() %} {% if messages %}
+<div class="container mt-3">
+  {% for message in messages %}
+  <div class="alert alert-info" role="alert">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endif %} {% endwith %}

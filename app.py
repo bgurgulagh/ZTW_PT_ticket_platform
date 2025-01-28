@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 import random
 import string
 import re
+from flask import g 
 
 app = Flask(__name__)
 app.config['MAIL_SERVER'] = 'smtp-relay.gmail.com' # Póki co niekatywne, ponieważ musze założyć najpierw skrzynkę, ogarnę przy następnej aktualizacji
@@ -90,11 +91,18 @@ def redirect_based_on_role(role):
         return redirect(url_for('admin_users'))
     elif role == "pasażer":
         return redirect(url_for('moje_bilety'))
-        return render_template('pages/tickets_check.html', title='Moje bilety –', header='Moje bilety')
-    elif role == "kontroler ":
+    elif role == "kontroler":
         return redirect(url_for('kontrola'))
     else:
         return redirect(url_for('login'))
+
+@app.before_request
+def load_logged_in_user():
+    user_id = session.get('user_id')
+    if user_id:
+        g.user = User.query.get(user_id)
+    else:
+        g.user = None
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -157,35 +165,35 @@ def role_required(role):
 @role_required('admin')
 def admin_users():
     users = User.query.all()
-    return render_template('pages/admin_userBase.html', title='Użytkownicy –', header='Użytkownicy', users=users)
+    return render_template('pages/admin_userBase.html', title='Użytkownicy –', header='Użytkownicy', users=users, gUser=g.user)
 
 @app.route('/moje_bilety')
-# @login_required
-# @role_required('user')
+@login_required
+@role_required('pasażer')
 def moje_bilety():
-    return render_template('pages/tickets_check.html', title='Moje bilety –', header='Moje bilety')
+    return render_template('pages/tickets_check.html', title='Moje bilety –', header='Moje bilety', gUser=g.user)
 
 @app.route('/kup_bilet')
 def kup_bilet():
-    return render_template('pages/tickets.html', title='Kup bilet –', header='Kup bilet')
+    return render_template('pages/tickets.html', title='Kup bilet –', header='Kup bilet', gUser=g.user)
 
 @app.route('/moj_profil')
 def moj_profil():
-    return render_template('pages/profile_user.html', title='Mój profil –', header='Mój profil')
+    return render_template('pages/profile_user.html', title='Mój profil –', header='Mój profil', gUser=g.user)
 
 @app.route('/profil_kontrolera')
 def profil_kontrolera():
-    return render_template('pages/controler_noEdit.html', title='Profil kontrolera –', header='Mój profil')
+    return render_template('pages/controler_noEdit.html', title='Profil kontrolera –', header='Mój profil' , gUser=g.user)
 
 @app.route('/kontrola')
 @login_required
-@role_required('controller')
+@role_required('kontroler')
 def kontrola():
-    return render_template('pages/controler_ticketCheck.html', title='Kontrola –', header='Kontrola biletów')
+    return render_template('pages/controler_ticketCheck.html', title='Kontrola –', header='Kontrola biletów' , gUser=g.user)
 
 @app.route('/rejestracja')
 def rejestracja():
-    return render_template('signup.html')
+    return render_template('signup.html' , gUser=g.user)
 
 @app.route('/admin_uzytkownicy')
 def admin_uzytkownicy():

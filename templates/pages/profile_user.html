@@ -19,7 +19,7 @@
         <div class="card col-xl-4 col-md-6">
           <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
-              <h3 class="mb-0">Jan Kowalski</h3>
+              <h3 class="mb-0">{{ gUser.name }} {{ gUser.surname}}</h3>
               <button class="btn btn-light btn-sm">
                 <i class="bi bi-pencil"></i>
               </button>
@@ -30,20 +30,18 @@
               <tbody>
                 <tr>
                   <th scope="row" class="text-start">Login</th>
-                  <td class="text-end">JanKowalski</td>
+                  <td class="text-end">{{ gUser.username }}</td>
                 </tr>
                 <tr>
                   <th scope="row" class="text-start">E-mail</th>
-                  <td class="text-end">jan.kowalski@example.com</td>
-                </tr>
-                <tr>
-                  <th scope="row" class="text-start">Hasło</th>
-                  <td class="text-end">***</td>
+                  <td class="text-end">{{ gUser.email }}</td>
                 </tr>
               </tbody>
             </table>
             <div class="mt-2">
-              <button class="btn btn-primary" type="button">Wyloguj się</button>
+              <a class="btn btn-primary" type="button" href="/logout"
+                >Wyloguj się</a
+              >
             </div>
           </div>
         </div>
