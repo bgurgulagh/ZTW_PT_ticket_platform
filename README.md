@@ -1,4 +1,37 @@
 # Aplikacja webowa do zarządzania biletami KMK
+
+## Wstęp
+### Opis projektu
+Aplikacja webowa powstała z myślą o zarządzaniu biletami komunikacji miejskiej. System pozwala na rejestrację oraz logowanie użytkowników, zakup i przeglądanie posiadanych przez pasażerów biletów, kontrolę biletów oraz zarządzanie bazami biletów oraz wszystkich użytkowników z poziomu administratora. 
+
+### Opis funkcjonalności
+W celu zapewnienia kompleksowości systemu zarządzania biletami, potencjalni użytkownicy aplikacji zostali podzieleni na trzy grupy: pasażerów, kontrolerów oraz administratorów. Dostępne funkcjonalności różnią się ze względu na posiadaną przez użytkownika rolę.
+
+**Funkcjonalności z poziomu pasażera**
+- rejestracja nowego użytkownika
+- logowanie zarejestrowanego użytkownika
+- przegląd zakupionych biletów, w tym sprawdzenie ich ważności
+- pokazanie biletu kontrolerowi w czasie kontroli
+- przegląd dostępnych do zakupu biletów
+- zakup biletów
+- przegląd danych w profilu użytkownika
+- edycja danych w profilu użytkownika
+- usunięcie konta
+
+**Funkcjonalności z poziomu kontrolera**
+- logowanie zarejestrowanego użytkownika
+- kontrola ważności biletu pasażera
+- przegląd danych w profilu użytkownika
+
+**Funkcjonalności z poziomu administratora**
+- logowanie zarejestrowanego użytkownika
+- przegląd bazy biletów
+- edycja rekordów w bazie biletów
+- przegląd bazy użytkowników
+- edycja rekordów w bazie użytkowników
+- przegląd danych w profilu użytkownika
+- edycja danych w profilu użytkownika
+
 ## Uruchomienie aplikacji
 ```bash
 python -m venv .env  
