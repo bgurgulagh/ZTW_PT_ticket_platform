@@ -1,0 +1,44 @@
+<div id="addTicketModal" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Dodaj nowy bilet</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addTicketForm">
+                    <div class="mb-3">
+                        <label for="addTime" class="form-label">Czas</label>
+                        <input type="text" class="form-control" id="addTime">
+                    </div>
+                    <div class="mb-3">
+                        <label for="addTariff" class="form-label">Taryfa</label>
+                        <select class="form-control form-select" id="addTariff">
+                            <option value="discount">Ulgowy</option>
+                            <option value="normal">Normalny</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="addZone" class="form-label">Strefa</label>
+                        <select class="form-control form-select" id="addZone">
+                            <option value="first">pierwsza</option>
+                            <option value="all">wszystkie</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="addPrice" class="form-label">Cena</label>
+                        <input type="text" class="form-control" id="addPrice">
+                    </div>
+                    <div class="mb-3">
+                        <label for="addDescription" class="form-label">Opis</label>
+                        <input type="text-area" class="form-control" id="addDescription">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
+                <button type="button" class="btn btn-primary" id="saveNewTicket">Dodaj bilet</button>
+            </div>
+        </div>
+    </div>
+</div>

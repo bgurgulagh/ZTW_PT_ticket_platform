@@ -172,6 +172,13 @@ def admin_uzytkownicy():
     users = User.query.all()
     return render_template('pages/admin_userBase.html', title='Użytkownicy –', header='Użytkownicy', users=users, gUser=g.user)
 
+@app.route('/admin/bilety')
+@login_required
+@role_required('admin')
+def admin_bilety():
+    tickets = TicketData.query.all()
+    return render_template('pages/TD_admin_ticketBase.html', title='Bilety –', header='Bilety', tickets=tickets, gUser=g.user)
+
 @app.route('/bilety')
 @login_required
 @role_required('pasażer')
