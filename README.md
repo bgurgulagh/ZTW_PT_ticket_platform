@@ -7,7 +7,7 @@ Aplikacja webowa powstała z myślą o zarządzaniu biletami komunikacji miejski
 ### Opis funkcjonalności
 W celu zapewnienia kompleksowości systemu zarządzania biletami, potencjalni użytkownicy aplikacji zostali podzieleni na trzy grupy: pasażerów, kontrolerów oraz administratorów. Dostępne funkcjonalności różnią się ze względu na posiadaną przez użytkownika rolę.
 
-**Funkcjonalności z poziomu pasażera**
+**Funkcjonalności pasażera**
 - rejestracja nowego użytkownika
 - logowanie zarejestrowanego użytkownika
 - przegląd zakupionych biletów, w tym sprawdzenie ich ważności
@@ -18,17 +18,24 @@ W celu zapewnienia kompleksowości systemu zarządzania biletami, potencjalni u�
 - edycja danych w profilu użytkownika
 - usunięcie konta
 
-**Funkcjonalności z poziomu kontrolera**
+**Funkcjonalności kontrolera**
 - logowanie zarejestrowanego użytkownika
 - kontrola ważności biletu pasażera
 - przegląd danych w profilu użytkownika
 
-**Funkcjonalności z poziomu administratora**
+**Funkcjonalności administratora**
 - logowanie zarejestrowanego użytkownika
 - przegląd bazy biletów
 - edycja rekordów w bazie biletów
+  - edycja danych
+  - dodanie biletu
+  - usunięcie biletu
 - przegląd bazy użytkowników
 - edycja rekordów w bazie użytkowników
+  - edycja danych użytkownika
+  - wysłanie wiadomości w celu zresetowania hasła użytkownika
+  - dodanie użytkownika
+  - usunięcie użytkownika 
 - przegląd danych w profilu użytkownika
 - edycja danych w profilu użytkownika
 
