@@ -3,26 +3,7 @@
 <body>
   <div class="main-content">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top">
-      <div class="container-xxl py-2 px-4">
-        <div class="navbar-brand">
-          <img
-            src="{{ url_for('static', filename='images/logo.svg') }}"
-            width="90"
-            height="auto"
-          />
-        </div>
-      </div>
-    </nav>
-
-    <!-- Wyświetlanie powiadomień z systemu -->
-    {% with messages = get_flashed_messages() %} {% if messages %}
-    <div class="container mt-3">
-      {% for message in messages %}
-      <div class="alert alert-info" role="alert">{{ message }}</div>
-      {% endfor %}
-    </div>
-    {% endif %} {% endwith %}
+    {% include 'navbar.html' %}
 
     <!-- Login -->
     <section id="login">

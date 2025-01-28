@@ -28,10 +28,7 @@
       <ul class="navbar-nav">
         {% if gUser.role == 'pasażer' %}
         <li class="nav-item">
-          <a
-            href="/bilety"
-            class="nav-link active"
-            onload="checkActive(this)"
+          <a href="/bilety" class="nav-link active" onload="checkActive(this)"
             >Moje bilety</a
           >
         </li>
@@ -44,14 +41,20 @@
 
         {% elif gUser.role == 'kontroler' %}
         <li class="nav-item">
-          <a href="/kontroler/kontrola" class="nav-link" onload="checkActive(this)"
+          <a
+            href="/kontroler/kontrola"
+            class="nav-link"
+            onload="checkActive(this)"
             >Kontrola</a
           >
         </li>
 
         {% elif gUser.role == 'admin' %}
         <li class="nav-item">
-          <a href="/admin/uzytkownicy" class="nav-link" onload="checkActive(this)"
+          <a
+            href="/admin/uzytkownicy"
+            class="nav-link"
+            onload="checkActive(this)"
             >Użytkownicy</a
           >
         </li>
@@ -61,12 +64,14 @@
             >Bilety</a
           >
         </li>
-        {% endif %}
+        {% endif %} {% if gUser.role == "admin" or gUser.role == "kontroler" or
+        gUser.role == "pasażer" %}
         <li class="nav-item">
           <a href="/profil" class="nav-link" onload="checkActive(this)"
             >Mój profil</a
           >
         </li>
+        {% endif %}
       </ul>
     </div>
   </div>

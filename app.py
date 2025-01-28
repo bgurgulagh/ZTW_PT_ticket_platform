@@ -126,7 +126,7 @@ def login():
         # return redirect(url_for('moje_bilety'))
     else:
         # Gdy żądanie jest GET, po prostu renderuj stronę logowania
-        return render_template('login.html', error=None)
+        return render_template('login.html', error=None, gUser=g.user)
 
 @app.route('/logout')
 def logout():
