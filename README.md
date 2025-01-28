@@ -1,9 +1,11 @@
 # Aplikacja webowa do zarządzania biletami KMK
 ## Uruchomienie aplikacji
+```bash
 python -m venv .env  
 .\\.env\Scripts\activate  
 pip install -r requirements.txt  
-python app.py  
+python app.py
+```  
   
 ## Architektura informacji
 <img width="2120" alt="Information Architecture v4" src="https://github.com/user-attachments/assets/b160c3d2-afd7-4054-af92-1114f6584587" />  
