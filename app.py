@@ -421,6 +421,8 @@ def get_user_tickets():
                     remaining_time = f"{int(hours)} h {int(minutes)} min"
                 else:
                     remaining_time = f"{int(minutes)} min"
+            else:
+                remaining_time = "Nieważny"
 
         buy_time = validation_time.strftime("%d.%m.%Y %H:%M")
 
