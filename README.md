@@ -83,7 +83,6 @@ python app.py
   
 ## Kolorystyka
 <img width="1778" alt="Colour Palette" src="https://github.com/user-attachments/assets/627ebd31-ce2a-423e-a22a-083c7237cbfb" />
-![Colours](static/images/readme_images/AI.svg)
 
 | Kolor  | #HEX | Przeznaczenie |
 | ------------- | ------------- | ------------- |
