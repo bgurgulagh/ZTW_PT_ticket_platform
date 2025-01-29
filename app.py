@@ -74,7 +74,7 @@ def generate_unique_token():
 
 # Przekształcanie czasu do sprawdzania ważności bieltów
 def parse_time(time_str):
-    match = re.match(r"(\d+)(min|h|dni)", time_str)
+    match = re.match(r"(\d+)(min|h|day)", time_str)
     if match:
         value, unit = match.groups()
         value = int(value)
@@ -82,7 +82,7 @@ def parse_time(time_str):
             return timedelta(minutes=value)
         elif unit == "h":
             return timedelta(hours=value)
-        elif unit == "dni":
+        elif unit == "day":
             return timedelta(days=value)
     return None
 
@@ -168,14 +168,14 @@ def rejestracja():
 def profil():
     return render_template('pages/profile_user.html', title='Mój profil –', header='Mój profil', gUser=g.user)
 
-@app.route('/admin_uzytkownicy')
+@app.route('/admin/uzytkownicy')
 @login_required
 @role_required('admin')
 def admin_uzytkownicy():
     users = User.query.all()
     return render_template('pages/admin_userBase.html', title='Użytkownicy –', header='Użytkownicy', users=users, gUser=g.user)
 
-@app.route('/admin_bilety')
+@app.route('/admin/bilety')
 @login_required
 @role_required('admin')
 def admin_bilety():
@@ -188,19 +188,19 @@ def admin_bilety():
 def bilety():
     return render_template('pages/tickets_check.html', title='Moje bilety –', header='Moje bilety', gUser=g.user)
 
-@app.route('/bilety_sklep')
+@app.route('/bilety/sklep')
 @login_required
 @role_required('pasażer')
 def bilety_sklep():
     return render_template('pages/tickets.html', title='Kup bilet –', header='Kup bilet', gUser=g.user)
 
-@app.route('/kontroler_profil')
+@app.route('/kontroler/profil')
 @login_required
 @role_required('kontroler')
 def kontroler_profil():
     return render_template('pages/controler_noEdit.html', title='Profil kontrolera –', header='Mój profil' , gUser=g.user)
 
-@app.route('/kontroler_kontrola')
+@app.route('/kontroler/kontrola')
 @login_required
 @role_required('kontroler')
 def kontroler_kontrola():
@@ -476,7 +476,13 @@ def check_ticket():
     time_difference = current_time - ticket.validation
     allowed_duration = parse_time(ticket.time)
 
-    if allowed_duration and time_difference <= allowed_duration:
+    print(f"Ticket time: {ticket.time}")
+    print(f"Validation time: {ticket.validation}")
+    print(f"Current time: {current_time}")
+    print(f"Time difference: {time_difference}")
+    print(f"Allowed duration: {allowed_duration}")
+
+    if allowed_duration and time_difference.total_seconds() <= allowed_duration.total_seconds():
         remaining_time = allowed_duration - time_difference
 
         # Oblicz dni, godziny i minuty
