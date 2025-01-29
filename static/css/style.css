@@ -26,6 +26,7 @@ body {
     align-items: center;
     gap: 5px;
     padding: 15px;
+    margin-top: 30px;
 }
 
 #footer {
@@ -53,15 +54,14 @@ body {
     border: none;
 }
 
-.navbar-toggler:focus, 
-.navbar-toggler:active {
+.navbar-toggler:focus, .navbar-toggler:active {
     outline: none;
     box-shadow: none;
 }
 
 #buy_tickets_header {
     display: flex;
-    flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
 }
@@ -102,18 +102,24 @@ body {
     gap: 30px;
     width: 600px;
     height: 100px;
-    background-color: #E6E6E6;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
 }
 
-#ticket_container {
+#ticket_container, #inactive_ticket_container, #ticket_container_normal, #ticket_container_discount {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-content: flex-start;
     gap: 30px;
+    margin-bottom: 20px;
+    margin-top: 30px;
+}
+
+#inactive_ticket_container #ticket_remaining_section {
+    background-color: #9D9D9C;
+}
+
+#inactive_ticket_container #ticket_remaining, #inactive_ticket_container #ticket_validation_info_section {
+    display: none;
 }
 
 .btn-primary {
@@ -140,6 +146,20 @@ body {
     font-weight: 700;
 }
 
+#section_name {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#section_divider {
+    background-color: #00305F;
+    height: 3px;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 /* login */
 #login {
     margin-top: 50px;
@@ -154,7 +174,7 @@ form .form-control {
 }
 /* koniec login */
 
-#tickets .ticket {
+#tickets .ticket, #ticket_buy_summary {
     background-color: #E6E6E6;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -171,4 +191,3 @@ form .form-control {
     font-size: 1.1rem;
     color: #9D9D9C;
 }
-

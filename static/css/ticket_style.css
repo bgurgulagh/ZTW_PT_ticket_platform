@@ -102,13 +102,19 @@ p {
     align-items: center;
 }
 
+#ticket_validation_info_section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+}
+
 #ticket_validation_info {
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 14px;
     font-weight: 700;
-    width: 100%;
 }
 
 #ticket_description_section {
@@ -117,9 +123,18 @@ p {
     align-items: center;
 }
 
+.ticket_low_time_remaining {
+    background-color: #E00726 !important;
+}
+
+#remaining_seconds, #time_type {
+    display: none;
+}
+
 #divider {
     background-color: #00305F;
-    height: 1.5px;
+    height: 2px;
+    width: 100%;
 }
 
 button {

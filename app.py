@@ -74,7 +74,7 @@ def generate_unique_token():
 
 # Przekształcanie czasu do sprawdzania ważności bieltów
 def parse_time(time_str):
-    match = re.match(r"(\d+)(min|h)", time_str)
+    match = re.match(r"(\d+)(min|h|dni)", time_str)
     if match:
         value, unit = match.groups()
         value = int(value)
@@ -82,6 +82,8 @@ def parse_time(time_str):
             return timedelta(minutes=value)
         elif unit == "h":
             return timedelta(hours=value)
+        elif unit == "dni":
+            return timedelta(days=value)
     return None
 
 # Logika logowania do odpowiedniej roli
@@ -177,7 +179,7 @@ def admin_uzytkownicy():
 @role_required('admin')
 def admin_bilety():
     tickets = TicketData.query.all()
-    return render_template('pages/TD_admin_ticketBase.html', title='Bilety –', header='Bilety', tickets=tickets, gUser=g.user)
+    return render_template('pages/admin_ticketBase.html', title='Bilety –', header='Bilety', tickets=tickets, gUser=g.user)
 
 @app.route('/bilety')
 @login_required
@@ -403,7 +405,8 @@ def get_user_tickets():
     username = g.user.username
     tickets = Ticket.query.filter_by(username=username).all()
 
-    ticket_data = []
+    active_tickets = []
+    inactive_tickets = []
     current_time = datetime.now()
 
     for ticket in tickets:
@@ -428,10 +431,12 @@ def get_user_tickets():
                     remaining_time = f"{int(hours)} h {int(minutes)} min"
                 else:
                     remaining_time = f"{int(minutes)} min"
+            else:
+                remaining_time = "Nieważny"
 
         buy_time = validation_time.strftime("%d.%m.%Y %H:%M")
 
-        ticket_data.append({
+        ticket_data = {
             "id": ticket.id,
             "time": ticket.time,
             "tariff": ticket.tariff,
@@ -439,10 +444,19 @@ def get_user_tickets():
             "description": ticket.description,
             "buy_time": buy_time,
             "remaining_time": remaining_time,
-            "is_valid": is_valid
-        })
+            "remaining_seconds": time_diff.total_seconds() if is_valid else -1,
+            "is_valid": is_valid,
+        }
 
-    return jsonify(ticket_data)
+        if is_valid:
+            active_tickets.append(ticket_data)
+        else:
+            inactive_tickets.append(ticket_data)
+
+    active_tickets.sort(key=lambda x: x["remaining_seconds"])
+    inactive_tickets.sort(key=lambda x: x["buy_time"], reverse=True)
+
+    return jsonify({"active": active_tickets, "inactive": inactive_tickets})
 
 # Kontrola biletów
 @app.route('/check_ticket', methods=['POST'])

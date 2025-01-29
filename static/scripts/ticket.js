@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    const ticketContainer = document.getElementById("ticket_container");
+    const ticketContainerNormal = document.getElementById("ticket_container_normal");
+    const ticketContainerDiscount = document.getElementById("ticket_container_discount");
 
     // Funkcja pobierająca dane dostępnych biletów
     async function loadTickets() {
@@ -20,7 +21,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                     .replace("ticket_price_placeholder", `${ticket.price}zł`)
                     .replace("ticket_description_placeholder", ticket.description);
 
-                ticketContainer.innerHTML += ticketHTML;
+                    if (ticket.tariff === "normal") {
+                        ticketContainerNormal.innerHTML += ticketHTML;
+                    } else if (ticket.tariff === "discount") {
+                        ticketContainerDiscount.innerHTML += ticketHTML;
+                    }
             });
 
             attachEventListeners();

@@ -15,54 +15,54 @@
     <section id="user-table">
       <div class="container-xl mt-1 py-3 px-4">
         
-      <!-- Sekcja filtrów -->
-        <div class="row mb-1">
-          <h5>Filtry</h5>
-        </div>
-          
-        <div class="d-flex flex-column flex-md-row gap-2 mb-3">
-          
-          <div class="d-flex flex-column flex-sm-row gap-2 flex-grow-1">
-            
-            <div class="flex-grow-1">
+        <!-- Sekcja filtrów -->
+        <section id="filters">
+          <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+            <div id="section_name">
+              <h2 class="mb-0">Filtry</h2>
+              <div id="filter_buttons">
+                <button id="resetBtn" class="btn btn-outline-primary">Reset</button>
+                <button id="filterBtn" class="btn btn-primary">Filtruj</button>
+              </div>
+            </div>
+            <div id="section_divider"></div>
+          </div>
+        </section>
+
+        <div class="row mb-3">
+          <div class="col-md-3">
               <input type="text" id="filterName" class="form-control" placeholder="Imię">
-            </div>
-            
-            <div class="flex-grow-1">
+          </div>
+          <div class="col-md-3">
               <input type="text" id="filterSurname" class="form-control" placeholder="Nazwisko">
-            </div>
-
-            <div class="flex-grow-1">
+          </div>
+          <div class="col-md-3">
               <input type="text" id="filterUsername" class="form-control" placeholder="Login">
-            </div>
-
-            <div class="flex-grow-1">
+          </div>
+          <div class="col-md-3">
               <select id="filterRole" class="form-control form-select">
-                <option value="">Rola</option>
-                <option value="admin">Admin</option>
-                <option value="kontroler">Kontroler</option>
-                <option value="pasażer">Pasażer</option>
+                  <option value="">Wszystkie role</option>
+                  <option value="admin">Admin</option>
+                  <option value="kontroler">Kontroler</option>
+                  <option value="pasażer">Pasażer</option>
               </select>
-            </div>
-
-
           </div>
-        
-          <div class="d-flex flex-column flex-sm-row gap-2" id="filter_buttons">
-            <button id="resetBtn" class="btn btn-outline-primary">Reset</button>
-            <button id="filterBtn" class="btn btn-primary">Filtruj</button>
-          </div>
-        </div>
+        </div><br><br>
 
         <!-- Tabela użytkowników -->
-        <div class="d-flex flex-wrap align-items-center justify-content-between mt-5 mb-3">
-          <h3 class="mb-0">Lista użytkowników</h3>
-          <button id="addUserBtn" class="btn btn-primary mt-2 mt-md-0">
-            <i class="bi bi-person-plus"></i> Dodaj użytkownika
-          </button>
-        </div>
+        <section id="user_table">
+          <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+            <div id="section_name">
+              <h2 class="mb-0">Lista użytkowników</h2>
+              <button id="addUserBtn" class="btn btn-primary mt-2 mt-md-0">
+                <i class="bi bi-person-plus"></i> Dodaj użytkownika
+              </button>
+            </div>
+            <div id="section_divider"></div>
+          </div>
+        </section>
 
-        <div id="userTableContainer" class="table-responsive">
+        <div id="userTableContainer">
           <table class="table align-middle mt-3" id="userTable">
               <thead>
                   <tr>
