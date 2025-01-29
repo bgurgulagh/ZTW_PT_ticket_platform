@@ -107,6 +107,7 @@ def load_logged_in_user():
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
+    session.clear()
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
