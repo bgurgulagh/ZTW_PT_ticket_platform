@@ -34,7 +34,7 @@
         </li>
 
         <li class="nav-item">
-          <a href="/bilety/sklep" class="nav-link" onload="checkActive(this)"
+          <a href="/bilety_sklep" class="nav-link" onload="checkActive(this)"
             >Kup bilet</a
           >
         </li>
@@ -42,7 +42,7 @@
         {% elif gUser.role == 'kontroler' %}
         <li class="nav-item">
           <a
-            href="/kontroler/kontrola"
+            href="/kontroler_kontrola"
             class="nav-link"
             onload="checkActive(this)"
             >Kontrola</a
@@ -52,7 +52,7 @@
         {% elif gUser.role == 'admin' %}
         <li class="nav-item">
           <a
-            href="/admin/uzytkownicy"
+            href="/admin_uzytkownicy"
             class="nav-link"
             onload="checkActive(this)"
             >Użytkownicy</a
@@ -60,7 +60,7 @@
         </li>
 
         <li class="nav-item">
-          <a href="/admin/bilety" class="nav-link" onload="checkActive(this)"
+          <a href="/admin_bilety" class="nav-link" onload="checkActive(this)"
             >Bilety</a
           >
         </li>

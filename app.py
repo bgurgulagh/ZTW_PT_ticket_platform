@@ -168,14 +168,14 @@ def rejestracja():
 def profil():
     return render_template('pages/profile_user.html', title='Mój profil –', header='Mój profil', gUser=g.user)
 
-@app.route('/admin/uzytkownicy')
+@app.route('/admin_uzytkownicy')
 @login_required
 @role_required('admin')
 def admin_uzytkownicy():
     users = User.query.all()
     return render_template('pages/admin_userBase.html', title='Użytkownicy –', header='Użytkownicy', users=users, gUser=g.user)
 
-@app.route('/admin/bilety')
+@app.route('/admin_bilety')
 @login_required
 @role_required('admin')
 def admin_bilety():
@@ -188,19 +188,19 @@ def admin_bilety():
 def bilety():
     return render_template('pages/tickets_check.html', title='Moje bilety –', header='Moje bilety', gUser=g.user)
 
-@app.route('/bilety/sklep')
+@app.route('/bilety_sklep')
 @login_required
 @role_required('pasażer')
 def bilety_sklep():
     return render_template('pages/tickets.html', title='Kup bilet –', header='Kup bilet', gUser=g.user)
 
-@app.route('/kontroler/profil')
+@app.route('/kontroler_profil')
 @login_required
 @role_required('kontroler')
 def kontroler_profil():
     return render_template('pages/controler_noEdit.html', title='Profil kontrolera –', header='Mój profil' , gUser=g.user)
 
-@app.route('/kontroler/kontrola')
+@app.route('/kontroler_kontrola')
 @login_required
 @role_required('kontroler')
 def kontroler_kontrola():

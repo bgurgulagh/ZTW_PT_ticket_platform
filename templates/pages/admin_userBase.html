@@ -1,3 +1,5 @@
+<!-- admin baza użytkowników -->
+
 {% include 'header.html' %}
 
 <body>
@@ -14,14 +16,17 @@
 
     <section id="user-table">
       <div class="container-xl mt-1 py-3 px-4">
-        
         <!-- Sekcja filtrów -->
         <section id="filters">
-          <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+          <div
+            class="d-flex flex-wrap align-items-center justify-content-between mb-3"
+          >
             <div id="section_name">
               <h2 class="mb-0">Filtry</h2>
               <div id="filter_buttons">
-                <button id="resetBtn" class="btn btn-outline-primary">Reset</button>
+                <button id="resetBtn" class="btn btn-outline-primary">
+                  Reset
+                </button>
                 <button id="filterBtn" class="btn btn-primary">Filtruj</button>
               </div>
             </div>
@@ -31,27 +36,45 @@
 
         <div class="row mb-3">
           <div class="col-md-3">
-              <input type="text" id="filterName" class="form-control" placeholder="Imię">
+            <input
+              type="text"
+              id="filterName"
+              class="form-control"
+              placeholder="Imię"
+            />
           </div>
           <div class="col-md-3">
-              <input type="text" id="filterSurname" class="form-control" placeholder="Nazwisko">
+            <input
+              type="text"
+              id="filterSurname"
+              class="form-control"
+              placeholder="Nazwisko"
+            />
           </div>
           <div class="col-md-3">
-              <input type="text" id="filterUsername" class="form-control" placeholder="Login">
+            <input
+              type="text"
+              id="filterUsername"
+              class="form-control"
+              placeholder="Login"
+            />
           </div>
           <div class="col-md-3">
-              <select id="filterRole" class="form-control form-select">
-                  <option value="">Wszystkie role</option>
-                  <option value="admin">Admin</option>
-                  <option value="kontroler">Kontroler</option>
-                  <option value="pasażer">Pasażer</option>
-              </select>
+            <select id="filterRole" class="form-control form-select">
+              <option value="">Wszystkie role</option>
+              <option value="admin">Admin</option>
+              <option value="kontroler">Kontroler</option>
+              <option value="pasażer">Pasażer</option>
+            </select>
           </div>
-        </div><br><br>
+        </div>
+        <br /><br />
 
         <!-- Tabela użytkowników -->
         <section id="user_table">
-          <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+          <div
+            class="d-flex flex-wrap align-items-center justify-content-between mb-3"
+          >
             <div id="section_name">
               <h2 class="mb-0">Lista użytkowników</h2>
               <button id="addUserBtn" class="btn btn-primary mt-2 mt-md-0">
@@ -64,49 +87,53 @@
 
         <div id="userTableContainer">
           <table class="table align-middle mt-3" id="userTable">
-              <thead>
-                  <tr>
-                      <th id="label">ID</th>
-                      <th id="label">Imię</th>
-                      <th id="label">Nazwisko</th>
-                      <th id="label">Login</th>
-                      <th id="label">Email</th>
-                      <th id="label">Rola</th>
-                      <th id="label">Edytuj</th>
-                      <th id="label">Usuń</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  {% for user in users %}
-                  <tr>
-                      <td>{{ user.id }}</td>
-                      <td>{{ user.name }}</td>
-                      <td>{{ user.surname }}</td>
-                      <td>{{ user.username }}</td>
-                      <td>{{ user.email }}</td>
-                      <td>{{ user.role }}</td>
-                      <td>
-                          <button class="btn btn-sm btn-outline-primary edit-user" 
-                                  data-user-id="{{ user.id }}" 
-                                  data-name="{{ user.name }}"
-                                  data-surname="{{ user.surname }}"
-                                  data-username="{{ user.username }}"
-                                  data-email="{{ user.email }}"
-                                  data-role="{{ user.role }}">
-                              <i class="bi bi-pencil"></i>
-                          </button>
-                      </td>
-                      <td>
-                          <button class="btn btn-sm btn-danger delete-user" data-user-id="{{ user.id }}">
-                              <i class="bi bi-trash"></i>
-                          </button>
-                      </td>
-                  </tr>
-                  {% endfor %}
-              </tbody>
+            <thead>
+              <tr>
+                <th id="label">ID</th>
+                <th id="label">Imię</th>
+                <th id="label">Nazwisko</th>
+                <th id="label">Login</th>
+                <th id="label">Email</th>
+                <th id="label">Rola</th>
+                <th id="label">Edytuj</th>
+                <th id="label">Usuń</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for user in users %}
+              <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.surname }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.role }}</td>
+                <td>
+                  <button
+                    class="btn btn-sm btn-outline-primary edit-user"
+                    data-user-id="{{ user.id }}"
+                    data-name="{{ user.name }}"
+                    data-surname="{{ user.surname }}"
+                    data-username="{{ user.username }}"
+                    data-email="{{ user.email }}"
+                    data-role="{{ user.role }}"
+                  >
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                </td>
+                <td>
+                  <button
+                    class="btn btn-sm btn-danger delete-user"
+                    data-user-id="{{ user.id }}"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
           </table>
         </div>
-      
       </div>
     </section>
 
