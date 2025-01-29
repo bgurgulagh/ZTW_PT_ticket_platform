@@ -1,4 +1,4 @@
-<!--do zrobienia działanie strony - edycja, ew. dodawanie i usuwanie biletów-->
+<!--do zrobienia działanie strony - edycja, dodawanie i usuwanie biletów-->
 
 {% include 'header.html' %}
 
@@ -60,8 +60,6 @@
           </button>
         </div>
 
-        <!--usuwanie biletu - też nie wiem czy ma być-->
-
         <div id="ticketTableContainer" class="table-responsive">
           <table class="table align-middle mt-3" id="ticketTable">
               <thead>
@@ -73,7 +71,7 @@
                       <th id="label">Cena</th>
                       <th id="label">Opis</th>
                       <th id="label">Edytuj</th>
-                      <!--<th id="label">Usuń</th>-->
+                      <th id="label">Usuń</th>
                   </tr>
               </thead>
               <tbody>
@@ -96,13 +94,11 @@
                               <i class="bi bi-pencil"></i>
                           </button>
                       </td>
-                      <!--
                       <td>
                           <button class="btn btn-sm btn-danger delete-ticket" data-ticket-id="{{ ticket.id }}">
                               <i class="bi bi-trash"></i>
                           </button>
                       </td>
-                      -->
                   </tr>
                   {% endfor %}
               </tbody>
