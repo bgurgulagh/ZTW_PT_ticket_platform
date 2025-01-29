@@ -47,6 +47,18 @@ body {
     gap: 20px;
 }
 
+.navbar-toggler {
+    padding-right: 4px;
+    padding-left: 4px;
+    border: none;
+}
+
+.navbar-toggler:focus, 
+.navbar-toggler:active {
+    outline: none;
+    box-shadow: none;
+}
+
 #buy_tickets_header {
     display: flex;
     flex-direction: row;
@@ -132,10 +144,10 @@ body {
 #login {
     margin-top: 50px;
 }
-
+/*
 #login .container-lg {
-    max-width: 500px;
-}
+    max-width: none;
+}*/
 
 form .form-control {
     margin-bottom: 15px;
@@ -163,3 +175,4 @@ form .form-control {
     font-size: 1.1rem;
     color: #9D9D9C;
 }
+
