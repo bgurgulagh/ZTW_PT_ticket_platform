@@ -1,0 +1,46 @@
+<div id="userTableContainer">
+  <table class="table align-middle mt-3" id="userTable">
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.surname }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.role }}</td>
+        <td>
+          <button
+            class="btn btn-sm btn-outline-primary edit-user"
+            data-user-id="{{ user.id }}"
+            data-name="{{ user.name }}"
+            data-surname="{{ user.surname }}"
+            data-username="{{ user.username }}"
+            data-email="{{ user.email }}"
+            data-role="{{ user.role }}"
+          >
+            <i class="bi bi-pencil"></i>
+          </button>
+        </td>
+        <td>
+          <button
+            class="btn btn-sm btn-danger delete-user"
+            data-user-id="{{ user.id }}"
+          >
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Pop up edycji użytkowników -->
+{% include 'admin_edit_user_modal.html' %}
+
+<!-- Pop up dodawania użytkowników -->
+{% include 'admin_add_user_modal.html' %}
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="../static/scripts/user.js"></script>
