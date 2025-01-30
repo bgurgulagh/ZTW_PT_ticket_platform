@@ -7,21 +7,21 @@
     <section id="header_name">
       <div class="container-xl mt-4 py-3 px-4">
         <div class="row">
-          <h1 class="display-4">{{ header if header else '' }}</h1>
+          <h1 class="text-center display-4">{{ header if header else '' }}</h1>
         </div>
       </div>
     </section>
 
     <section id="kontrola">
-      <div class="container-lg mt-1 py-3 px-4">
-        <form>
-          <div class="col-md-6 mb-3">
-            <label for="ticket-id-number" class="form-label">Numer ID biletu</label>
-            <div id="ticket-id-number-info" class="form-text">Wpisz numer ID biletu, aby sprawdzić jego ważność.</div>
-            <input type="text" class="form-control" id="ticket-id-number" aria-describedby="ticket-id-number-info" required>            
-          </div>
-          <button type="submit" class="btn btn-primary">Sprawdź</button>
-        </form>
+      <div class="col-md-6 mx-auto py-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between mb-3" id="ticket_validation">
+          <h2 id="ticket_id_label">Numer ID biletu</h2>
+          <p id="ticket_id_form_info">Wpisz numer ID biletu, aby sprawdzić jego ważność</p>
+          <form id="ticket_validation_form">
+            <input type="text" class="form-control" id="ticket-id-number" aria-describedby="ticket-id-number-info" required>
+            <button type="submit" class="btn btn-primary">Sprawdź</button>
+          </form>
+        </div>
       </div>
     </section>
   </div>

@@ -1,0 +1,34 @@
+{% include 'header.html' %}
+
+<body>
+  <div class="main-content">
+    {% include 'navbar.html' %}
+
+    <section id="header_name">
+      <div class="container-xl mt-4 py-3 px-4">
+        <div class="row">
+          <h1 class="text-center display-4">{{ header if header else '' }}</h1>
+        </div>
+      </div>
+    </section>
+
+    <section id="token_section">
+        <div class="container-xl mt-4 py-3 px-4" id="token_check_section">
+            <div id="token_qr"></div>
+            <div id="token_display">
+                <p>Numer ID Twojego biletu:</p>
+                <h2>{{ token }}</h2>
+            </div>
+        </div>
+      </section>
+  </div>
+
+  {% include 'footer.html' %}
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"
+  ></script>
+  <script src="../static/scripts/ticketQR.js"></script>
+</body>

@@ -3,16 +3,15 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
-import random
-import string
-import re
+import random, string, re, json
 
 app = Flask(__name__)
-app.config['MAIL_SERVER'] = 'smtp-relay.gmail.com' # Póki co niekatywne, ponieważ musze założyć najpierw skrzynkę, ogarnę przy następnej aktualizacji
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'portal.pasazera.kmk@gmail.com'
-app.config['MAIL_PASSWORD'] = 'hasło' # Trzeba podać hasło do skrzynki
+app.config['MAIL_DEFAULT_SENDER'] = 'Portal Pasażera KMK <portal.pasazera@gmail.com>'
+app.config['MAIL_USERNAME'] = 'portal.pasazera@gmail.com'
+app.config['MAIL_PASSWORD'] = 'ygfs poxc skdv ebdj' # Hasło testowe przestanie działać po pewnym czasie
 mail = Mail(app)
 app.config['SESSION_PERMANENT'] = True
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)  # Sesja ważna przez 60 minut
@@ -133,7 +132,6 @@ def login():
 
 @app.route('/logout')
 def logout():
-    # Czyszczenie sesji użytkownika
     session.clear()
     flash("Zostałeś wylogowany.", "info")
     return redirect(url_for('login'))
@@ -193,6 +191,17 @@ def bilety():
 @role_required('pasażer')
 def bilety_sklep():
     return render_template('pages/tickets.html', title='Kup bilet –', header='Kup bilet', gUser=g.user)
+
+@app.route('/bilety/kontrola')
+@login_required
+@role_required('pasażer')
+def bilety_kontrola():
+    token = request.args.get("token")
+    if not token:
+        flash("Brak tokena biletu.", "error")
+        return redirect(url_for("tickets"))
+
+    return render_template("pages/ticketCheck.html", title="Kontrola biletów", header="Kontrola biletów", gUser=g.user, token=token)
 
 @app.route('/kontroler/profil')
 @login_required
@@ -308,6 +317,11 @@ def update_user_ajax(user_id):
     user.role = data.get('role')
 
     db.session.commit()
+
+    msg = Message("Dane konta w Portalu Pasażera KMK", recipients=[data.get('email')])
+    msg.body = f"Twoje dane w Profilu Pasażera KMK uległy zmianie.\n\nAktualne dane Twojego konta znajdziesz poniżej:\n\nLogin: {data.get('username')}\nImię: {data.get('name')}\nNazwisko: {data.get('surname')}\nRola: {data.get('role')}"
+    mail.send(msg)
+
     return jsonify({"success": True})
 
 # Dodanie nowego użytkownika w panelu admina
@@ -325,6 +339,11 @@ def add_user_ajax():
         )
         db.session.add(new_user)
         db.session.commit()
+
+        msg = Message("Witamy w Portalu Pasażera KMK", recipients=[data['email']])
+        msg.body = f"Witamy w Portalu Pasażera KMK!\n\nDane logowania do Twojego nowego konta znajdziesz poniżej:\n\nLogin: {data['username']}\nHasło: {data['password']}"
+        mail.send(msg)
+
         return jsonify({"success": True})
     except Exception as e:
         db.session.rollback()
@@ -346,6 +365,10 @@ def signup():
         if existing_user:
             flash('Nazwa użytkownika jest już zajęta. Wybierz inną.', 'danger')
             return redirect(url_for('signup'))
+
+        msg = Message("Witamy w Portalu Pasażera KMK", recipients=[email])
+        msg.body = f"Witamy w Portalu Pasażera KMK!\n\nDane logowania do Twojego nowego konta znajdziesz poniżej:\n\nLogin: {username}\nHasło: {password}"
+        mail.send(msg)
 
         new_user = User(
             name=firstname,
@@ -411,9 +434,9 @@ def reset_password(user_id):
     user.password = generate_password_hash(new_password)
     db.session.commit()
 
-    #msg = Message("Twoje nowe hasło", sender="Portal Pasażera KMK", recipients=[user.email])
-    #msg.body = f"Twoje nowe hasło do Portalu Pasażera to: {new_password}"
-    #mail.send(msg)
+    msg = Message("Reset hasła do Portalu Pasażera KMK", recipients=[user.email])
+    msg.body = f"Twoje nowe hasło do Portalu Pasażera KMK to: {new_password}"
+    mail.send(msg)
 
     return jsonify({'success': True, 'message': 'Hasło zresetowane i wysłane na e-mail.'})
 
@@ -522,6 +545,7 @@ def get_user_tickets():
             "remaining_time": remaining_time,
             "remaining_seconds": time_diff.total_seconds() if is_valid else -1,
             "is_valid": is_valid,
+            "token": ticket.token
         }
 
         if is_valid:
@@ -560,13 +584,11 @@ def check_ticket():
     if allowed_duration and time_difference.total_seconds() <= allowed_duration.total_seconds():
         remaining_time = allowed_duration - time_difference
 
-        # Oblicz dni, godziny i minuty
         remaining_days = remaining_time.days
         remaining_seconds = remaining_time.seconds
         remaining_hours = remaining_seconds // 3600
         remaining_minutes = (remaining_seconds % 3600) // 60
 
-        # Tworzenie komunikatu
         if remaining_days > 0:
             message = f"Bilet jest ważny, pozostało {remaining_days} dni, {remaining_hours} godzin i {remaining_minutes} minut."
         elif remaining_hours > 0:
@@ -578,54 +600,106 @@ def check_ticket():
     else:
         return jsonify({"success": False, "message": "Bilet jest nieważny."})
 
-# endpointy tymczasowe do developmentu bazy danych
-@app.route('/tickets')
-def inspect_tickets():
+# endpointy deweloperskie
+@app.route('/dev/tickets')
+def dev_tickets():
     tickets = Ticket.query.all()
     ticket_list = [f"{ticket.id}: {ticket.username}, {ticket.token}, v.{ticket.validation}, {ticket.time}, {ticket.tariff}, {ticket.zone}, {ticket.description}" for ticket in tickets]
     return "<br>".join(ticket_list)
 
-@app.route('/ticketsdata')
-def ticketsdata():
+@app.route('/dev/tickets/data')
+def dev_tickets_data():
     tickets = TicketData.query.all()
     ticket_list = [f"{ticket.id}: {ticket.time}, {ticket.tariff}, {ticket.zone}, {ticket.price}, {ticket.description}" for ticket in tickets]
     return "<br>".join(ticket_list)
 
-@app.route('/users')
-def get_users():
+@app.route('/dev/users')
+def dev_users():
     users = User.query.all()
     user_list = [f"{user.id}: {user.name} {user.surname}, l.{user.username}, h.{user.password}, {user.role} ({user.email})" for user in users]
     return "<br>".join(user_list)
 
-@app.route('/ticket_buy')
-def ticket_buy():
+@app.route('/dev/ticket_buy')
+def dev_ticket_buy():
     validation_time = datetime.now()
     token = generate_unique_token()
-    username = "bgurgul"
-    time = "20min"
+    username = "developer"
+    time = "6min"
     tariff = "normal"
     zone = "all"
-    description = "Bilet normalny 20-minutowy, strefy I+II+III"
+    description = "Bilet deweloperski 6-minutowy"
     
     new_ticket = Ticket(validation=validation_time, token=token, username=username, time=time, tariff=tariff, zone=zone, description=description)
     db.session.add(new_ticket)
     db.session.commit()
-    return f'Bilet został zapisany.'
+    return f'Bilet został zapisany'
 
-#@app.route('/add_ticket')
-def add_ticket():
-        time = "7day"
-        tariff = "discount"
-        zone = "all"
-        price = "34,00"
-        description = "Bilet ulgowy 7-dniowy, strefy I+II+III"
-        
-        new_ticket = TicketData(time=time, tariff=tariff, zone=zone, price=price, description=description)
+@app.route('/dev/tickets/config')
+def dev_tickets_config():
+    db.session.query(TicketData).delete()
+    db.session.commit()
+
+    with open('tickets_config.json', 'r', encoding='utf-8') as f:
+        ticket_data = json.load(f)
+    
+    for data in ticket_data:
+        new_ticket = TicketData(
+            time=data['time'],
+            tariff=data['tariff'],
+            zone=data['zone'],
+            price=data['price'],
+            description=data['description']
+        )
         db.session.add(new_ticket)
-        db.session.commit()
-        return f'Bilet został dodany.'
+    
+    db.session.commit()
+    return f'Baza biletów została zapisana'
 
-# koniec endpointów tymczasowych
+@app.route('/dev/users/config')
+def dev_users_config():
+    db.session.query(User).delete()
+    db.session.commit()
+
+    new_user = User(
+        name="admin",
+        surname="admin",
+        username="admin",
+        password=generate_password_hash("admin"),
+        email="admin@admin.com",
+        role="admin"
+    )
+    db.session.add(new_user)
+
+    new_user = User(
+        name="kontrola",
+        surname="kontrola",
+        username="kontrola",
+        password=generate_password_hash("kontrola"),
+        email="kontrola@kontrola.com",
+        role="kontroler"
+    )
+    db.session.add(new_user)
+
+    new_user = User(
+        name="user",
+        surname="user",
+        username="user",
+        password=generate_password_hash("user"),
+        email="user@user.com",
+        role="pasażer"
+    )
+    db.session.add(new_user)
+
+    db.session.commit()
+    return f'Baza użytkowników została zapisana'
+
+@app.route('/dev/tickets/reset')
+def dev_tickets_reset():
+    db.session.query(Ticket).delete()
+    db.session.commit()
+    return f'Baza kupionych biletów została zresetowana'
+
+# koniec endpointów deweloperskich
 
 if __name__ == '__main__':
     with app.app_context():

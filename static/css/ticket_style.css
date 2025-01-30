@@ -36,6 +36,7 @@ p {
     justify-content: space-between;
     align-items: center;
     height: 70px;
+    width: 100%;
 }
 
 #ticket_main_info_spec {
@@ -74,6 +75,7 @@ p {
     justify-content: center;
     align-items: center;
     height: 70px;
+    width: 100%;
     background-color: #00305F;
 }
 
@@ -127,7 +129,7 @@ p {
     background-color: #E00726 !important;
 }
 
-#remaining_seconds, #time_type {
+#remaining_seconds, #time_type, #token_id {
     display: none;
 }
 

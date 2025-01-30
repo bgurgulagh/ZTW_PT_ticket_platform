@@ -84,7 +84,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                     .replace("ticket_buy_time_placeholder", ticket.buy_time)
                     .replace("ticket_remaining_time_placeholder", ticket.remaining_time)
                     .replace("ticket_remaining_seconds_placeholder", ticket.remaining_seconds)
-                    .replace("ticket_time_type_placeholder", ticket.time);
+                    .replace("ticket_time_type_placeholder", ticket.time)
+                    .replace("ticket_token_placeholder", ticket.token);
 
                 // Dodanie klasy koloru
                 const colorClass = getTimeColorClass(ticket);
@@ -112,6 +113,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error("Błąd podczas ładowania danych biletów:", error);
         }
     }
+
+    ticketContainer.addEventListener("click", event => {
+        const ticket = event.target.closest(".ticket");
+        if (ticket) {
+            const token = ticket.querySelector("#token_id").textContent;
+            window.location.href = `/bilety/kontrola?token=${token}`;
+        }
+    });
 
     await loadTicketsCheck();
 

@@ -144,7 +144,6 @@ $(document).ready(function() {
     del_user()
     edit_user()
     add_user()
-
 });
 
 // Filtrowanie użytkowników
@@ -209,7 +208,6 @@ $(document).ready(function() {
                 alert("Wystąpił błąd podczas filtrowania.");
             }
         });
-        
     });
 
     $("#resetBtn").click(function() {

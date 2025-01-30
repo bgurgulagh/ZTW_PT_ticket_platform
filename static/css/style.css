@@ -122,6 +122,11 @@ body {
     display: none;
 }
 
+#inactive_ticket_container .ticket {
+    cursor: default;
+    pointer-events: none;
+}
+
 .btn-primary {
     background-color: #00305F;
     border-color: #00305F;
@@ -158,6 +163,36 @@ body {
     width: 100%;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+#token_check_section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#token_display {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    margin-top: 40px;
+}
+
+#ticket_validation {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+}
+
+#ticket_validation_form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
 }
 
 /* login */
