@@ -16,14 +16,17 @@
 
     <section id="user-table">
       <div class="container-xl mt-1 py-3 px-4">
-
         <!-- Sekcja filtrów -->
         <section id="filters">
-          <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+          <div
+            class="d-flex flex-wrap align-items-center justify-content-between mb-3"
+          >
             <div id="section_name">
               <h2 class="mb-0">Filtry</h2>
               <div id="filter_buttons">
-                <button id="resetBtn" class="btn btn-outline-primary">Reset</button>
+                <button id="resetBtn" class="btn btn-outline-primary">
+                  Reset
+                </button>
                 <button id="filterBtn" class="btn btn-primary">Filtruj</button>
               </div>
             </div>
@@ -46,12 +49,14 @@
               <option value="all">Wszystkie</option>
             </select>
           </div>
-        </div><br><br>
-
+        </div>
+        <br /><br />
 
         <!-- Tabela biletów -->
         <section id="ticket_table">
-          <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+          <div
+            class="d-flex flex-wrap align-items-center justify-content-between mb-3"
+          >
             <div id="section_name">
               <h2 class="mb-0">Lista biletów</h2>
               <div id="filter_buttons">
@@ -66,59 +71,61 @@
 
         <div id="ticketTableContainer" class="table-responsive">
           <table class="table align-middle mt-3" id="ticketTable">
-              <thead>
-                  <tr>
-                      <th id="label">ID</th>
-                      <th id="label">Czas</th>
-                      <th id="label">Taryfa</th>
-                      <th id="label">Strefa</th>
-                      <th id="label">Cena</th>
-                      <th id="label">Opis</th>
-                      <th id="label">Edytuj</th>
-                      <th id="label">Usuń</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  {% for ticket in tickets %}
-                  <tr>
-                      <td>{{ ticket.id }}</td>
-                      <td>{{ ticket.time }}</td>
-                      <td>{{ ticket.tariff }}</td>
-                      <td>{{ ticket.zone }}</td>
-                      <td>{{ ticket.price }}</td>
-                      <td>{{ ticket.description }}</td>
-                      <td>
-                          <button class="btn btn-sm btn-outline-primary edit-ticket" 
-                                  data-ticket-id="{{ ticket.id }}" 
-                                  data-time="{{ ticket.time }}"
-                                  data-tariff="{{ ticket.tariff }}"
-                                  data-zone="{{ ticket.zone }}"
-                                  data-price="{{ ticket.price }}"
-                                  data-description="{{ ticket.description }}">
-                              <i class="bi bi-pencil"></i>
-                          </button>
-                      </td>
-                      <td>
-                          <button class="btn btn-sm btn-danger delete-ticket" data-ticket-id="{{ ticket.id }}">
-                              <i class="bi bi-trash"></i>
-                          </button>
-                      </td>
-                  </tr>
-                  {% endfor %}
-              </tbody>
+            <thead>
+              <tr>
+                <th id="label">ID</th>
+                <th id="label">Czas</th>
+                <th id="label">Taryfa</th>
+                <th id="label">Strefa</th>
+                <th id="label">Cena</th>
+                <th id="label">Opis</th>
+                <th id="label">Edytuj</th>
+                <th id="label">Usuń</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for ticket in tickets %}
+              <tr>
+                <td>{{ ticket.id }}</td>
+                <td>{{ ticket.time }}</td>
+                <td>{{ ticket.tariff }}</td>
+                <td>{{ ticket.zone }}</td>
+                <td>{{ ticket.price }}</td>
+                <td>{{ ticket.description }}</td>
+                <td>
+                  <button
+                    class="btn btn-sm btn-outline-primary edit-ticket"
+                    data-ticket-id="{{ ticket.id }}"
+                    data-time="{{ ticket.time }}"
+                    data-tariff="{{ ticket.tariff }}"
+                    data-zone="{{ ticket.zone }}"
+                    data-price="{{ ticket.price }}"
+                    data-description="{{ ticket.description }}"
+                  >
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                </td>
+                <td>
+                  <button
+                    class="btn btn-sm btn-danger delete-ticket"
+                    data-ticket-id="{{ ticket.id }}"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
           </table>
         </div>
-      
       </div>
     </section>
 
-    <!-- Pop up edycji ticketu 
+    <!-- Pop up edycji ticketu  -->
     {% include 'TD_admin_edit_ticket_modal.html' %}
-    -->
 
-    <!-- Pop up dodawania ticketu 
+    <!-- Pop up dodawania ticketu  -->
     {% include 'TD_admin_add_ticket_modal.html' %}
-    -->
   </div>
 
   {% include 'footer.html' %}
@@ -129,5 +136,5 @@
     crossorigin="anonymous"
   ></script>
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-  <script src="../static/scripts/user.js"></script>
+  <script src="../static/scripts/ticketBase.js"></script>
 </body>

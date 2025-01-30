@@ -206,6 +206,98 @@ def kontroler_profil():
 def kontroler_kontrola():
     return render_template('pages/controler_ticketCheck.html', title='Kontrola –', header='Kontrola biletów' , gUser=g.user)
 
+
+# START EDYCJI !!!!!!!!!!!!!
+
+# Usunięcie biletu w panelu admina
+@app.route('/delete_ticket_ajax/<int:ticketId>', methods=['DELETE'])
+def delete_ticket_ajax(ticketId):
+    ticket = TicketData.query.get(ticketId)
+
+    if ticket:
+        db.session.delete(ticket)
+        db.session.commit()
+        return jsonify({"success": True})
+    else:
+        return jsonify({"success": False, "error": "Bilet nie istnieje"}), 404
+
+# Edycja danych biletu w panelu admina
+@app.route('/update_ticket_ajax/<int:ticketId>', methods=['POST'])
+def update_ticket_ajax(ticketId):
+    ticket = TicketData.query.get(ticketId)
+    if not ticket:
+        return jsonify({"success": False, "error": "Bilet nie istnieje"}), 404
+
+    data = request.get_json()
+    ticket.time = data.get('time')
+    ticket.tariff = data.get('tariff')
+    ticket.zone = data.get('zone')
+    ticket.price = data.get('price')
+    ticket.description = data.get('description')
+
+    db.session.commit()
+    return jsonify({"success": True})
+
+# doł jeszce nie edytowany!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+# Dodanie nowego biletu w panelu admina
+
+# @app.route('/add_user_ajax', methods=['POST'])
+# def add_user_ajax():
+#     data = request.get_json()
+#     try:
+#         new_user = User(
+#             name=data['name'],
+#             surname=data['surname'],
+#             username=data['username'],
+#             email=data['email'],
+#             role=data['role'],
+#             password=generate_password_hash(data['password'])
+#         )
+#         db.session.add(new_user)
+#         db.session.commit()
+#         return jsonify({"success": True})
+#     except Exception as e:
+#         db.session.rollback()
+#         return jsonify({"success": False, "error": str(e)})
+
+# Filtrowanie rekordów biletów w panelu admina
+
+# @app.route('/filter_users', methods=['GET'])
+# def filter_users():
+#     name = request.args.get('name', '')
+#     surname = request.args.get('surname', '')
+#     username = request.args.get('username', '')
+#     role = request.args.get('role', '')
+
+#     query = User.query
+#     if name:
+#         query = query.filter(User.name.ilike(f"%{name}%"))
+#     if surname:
+#         query = query.filter(User.surname.ilike(f"%{surname}%"))
+#     if username:
+#         query = query.filter(User.username.ilike(f"%{username}%"))
+#     if role:
+#         query = query.filter(User.role.ilike(f"%{role}%"))
+
+#     users = query.all()
+#     users_data = [
+#         {
+#             "id": user.id,
+#             "name": user.name,
+#             "surname": user.surname,
+#             "username": user.username,
+#             "email": user.email,
+#             "role": user.role
+#         }
+#         for user in users
+#     ]
+#     return jsonify(users_data)
+
+
+# KONIEC EDYCJI !!!!!!!!!!!!!!!
+
+
 # Usunięcie użytkownika w panelu admina
 @app.route('/delete_user_ajax/<int:user_id>', methods=['DELETE'])
 def delete_user_ajax(user_id):
