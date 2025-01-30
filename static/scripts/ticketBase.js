@@ -23,7 +23,7 @@ $(document).ready(function() {
     });
 });
 
-// Edytowanie użytkownika
+// Edytowanie biletu
 $(document).ready(function() {
     $(".edit-ticket").click(function() {
         let ticketId = $(this).data("ticket-id");
@@ -68,88 +68,83 @@ $(document).ready(function() {
     });
 });
 
-// Dodawanie użytkownika
+// Dodawanie biletu
 $(document).ready(function() {
-    $("#addUserBtn").click(function() {
-        $("#addUserModal").modal("show");
+    $("#addTicketBtn").click(function() {
+        $("#addTicketModal").modal("show");
     });
 
-    $("#saveNewUser").click(function() {
-        let newUser = {
-            name: $("#addName").val(),
-            surname: $("#addSurname").val(),
-            username: $("#addUsername").val(),
-            email: $("#addEmail").val(),
-            role: $("#addRole").val(),
-            password: generatePassword(10)
+    $("#saveNewTicket").click(function() {
+        let newTicket = {
+            time: $("#addTime").val(),
+            tariff: $("#addTariff").val(),
+            zone: $("#addZone").val(),
+            price: $("#addPrice").val(),
+            description: $("#addDescription").val()
         };
 
         $.ajax({
-            url: "/add_user_ajax",
+            url: "/add_ticket_ajax",
             type: "POST",
             contentType: "application/json",
-            data: JSON.stringify(newUser),
+            data: JSON.stringify(newTicket),
             success: function(response) {
                 if (response.success) {
-                    alert("Użytkownik dodany pomyślnie.");
+                    alert("Bilet dodany pomyślnie.");
                     location.reload();
                 } else {
-                    alert("Błąd podczas dodawania użytkownika.");
+                    alert("Błąd podczas dodawania biletu.");
                 }
             },
             error: function() {
-                alert("Wystąpił problem podczas dodawania użytkownika.");
+                alert("Wystąpił problem podczas dodawania biletu.");
             }
         });
     });
 });
 
-// Filtrowanie użytkowników
+// Filtrowanie biletów
 $(document).ready(function() {
     $("#filterBtn").click(function() {
-        let name = $("#filterName").val();
-        let surname = $("#filterSurname").val();
-        let username = $("#filterUsername").val();
-        let role = $("#filterRole").val();
+        let tariff = $("#filterTariff").val();
+        let zone = $("#filterZone").val();
 
         $.ajax({
-            url: "/filter_users",
+            url: "/filter_tickets",
             type: "GET",
             data: {
-                name: name,
-                surname: surname,
-                username: username,
-                role: role
+                tariff: tariff,
+                zone: zone
             },
             success: function(response) {
-                let tbody = $("#userTable tbody");
+                let tbody = $("#ticketTableContainer tbody");
                 tbody.empty();
 
                 if (response.length === 0) {
                     tbody.append("<tr><td colspan='8' class='text-center'>Brak wyników</td></tr>");
                 } else {
-                    response.forEach(function(user) {
+                    response.forEach(function(ticket) {
                         let row = `
                             <tr>
-                                <td>${user.id}</td>
-                                <td>${user.name}</td>
-                                <td>${user.surname}</td>
-                                <td>${user.username}</td>
-                                <td>${user.email}</td>
-                                <td>${user.role}</td>
+                                <td>${ticket.id}</td>
+                                <td>${ticket.time}</td>
+                                <td>${ticket.tariff}</td>
+                                <td>${ticket.zone}</td>
+                                <td>${ticket.price}</td>
+                                <td>${ticket.description}</td>
                                 <td>
                                     <button class="btn btn-sm btn-outline-primary edit-user" 
-                                            data-user-id="${user.id}" 
-                                            data-name="${user.name}"
-                                            data-surname="${user.surname}"
-                                            data-username="${user.username}"
-                                            data-email="${user.email}"
-                                            data-role="${user.role}">
+                                            data-user-id="${ticket.id}" 
+                                            data-name="${ticket.time}"
+                                            data-surname="${ticket.tariff}"
+                                            data-username="${ticket.zone}"
+                                            data-email="${ticket.price}"
+                                            data-role="${ticket.description}">
                                         <i class="bi bi-pencil"></i>
                                     </button>
                                 </td>
                                 <td>
-                                    <button class="btn btn-sm btn-danger delete-user" data-user-id="${user.id}">
+                                    <button class="btn btn-sm btn-danger delete-ticket" data-ticket-id="${ticket.id}">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </td>
@@ -166,10 +161,8 @@ $(document).ready(function() {
     });
 
     $("#resetBtn").click(function() {
-        $("#filterName").val('');
-        $("#filterSurname").val('');
-        $("#filterUsername").val('');
-        $("#filterRole").val('');
+        $("#filterTariff").val('');
+        $("#filterZone").val('');
         location.reload();
     });
 });

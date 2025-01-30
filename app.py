@@ -206,9 +206,6 @@ def kontroler_profil():
 def kontroler_kontrola():
     return render_template('pages/controler_ticketCheck.html', title='Kontrola –', header='Kontrola biletów' , gUser=g.user)
 
-
-# START EDYCJI !!!!!!!!!!!!!
-
 # Usunięcie biletu w panelu admina
 @app.route('/delete_ticket_ajax/<int:ticketId>', methods=['DELETE'])
 def delete_ticket_ajax(ticketId):
@@ -238,65 +235,51 @@ def update_ticket_ajax(ticketId):
     db.session.commit()
     return jsonify({"success": True})
 
-# doł jeszce nie edytowany!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 # Dodanie nowego biletu w panelu admina
 
-# @app.route('/add_user_ajax', methods=['POST'])
-# def add_user_ajax():
-#     data = request.get_json()
-#     try:
-#         new_user = User(
-#             name=data['name'],
-#             surname=data['surname'],
-#             username=data['username'],
-#             email=data['email'],
-#             role=data['role'],
-#             password=generate_password_hash(data['password'])
-#         )
-#         db.session.add(new_user)
-#         db.session.commit()
-#         return jsonify({"success": True})
-#     except Exception as e:
-#         db.session.rollback()
-#         return jsonify({"success": False, "error": str(e)})
+@app.route('/add_ticket_ajax', methods=['POST'])
+def add_ticket_ajax():
+    data = request.get_json()
+    try:
+        new_ticket = TicketData(
+            time = data['time'],
+            tariff = data['tariff'],
+            zone = data['zone'],
+            price = data['price'],
+            description = data['description']
+        )
+        db.session.add(new_ticket)
+        db.session.commit()
+        return jsonify({"success": True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"success": False, "error": str(e)})
 
 # Filtrowanie rekordów biletów w panelu admina
+@app.route('/filter_tickets', methods=['GET'])
+def filter_tickets():
+    tariff = request.args.get('tariff', '')
+    zone = request.args.get('zone', '')
 
-# @app.route('/filter_users', methods=['GET'])
-# def filter_users():
-#     name = request.args.get('name', '')
-#     surname = request.args.get('surname', '')
-#     username = request.args.get('username', '')
-#     role = request.args.get('role', '')
+    query = TicketData.query
+    if tariff:
+        query = query.filter(TicketData.tariff.ilike(f"%{tariff}%"))
+    if zone:
+        zone = query.filter(TicketData.zone.ilike(f"%{zone}%"))
 
-#     query = User.query
-#     if name:
-#         query = query.filter(User.name.ilike(f"%{name}%"))
-#     if surname:
-#         query = query.filter(User.surname.ilike(f"%{surname}%"))
-#     if username:
-#         query = query.filter(User.username.ilike(f"%{username}%"))
-#     if role:
-#         query = query.filter(User.role.ilike(f"%{role}%"))
-
-#     users = query.all()
-#     users_data = [
-#         {
-#             "id": user.id,
-#             "name": user.name,
-#             "surname": user.surname,
-#             "username": user.username,
-#             "email": user.email,
-#             "role": user.role
-#         }
-#         for user in users
-#     ]
-#     return jsonify(users_data)
-
-
-# KONIEC EDYCJI !!!!!!!!!!!!!!!
-
+    tickets = query.all()
+    tickets_data = [
+        {
+            "id": ticket.id,
+            "time": ticket.time,
+            "tariff": ticket.tariff,
+            "zone": ticket.zone,
+            "price": ticket.price,
+            "description": ticket.description
+        }
+        for ticket in tickets
+    ]
+    return jsonify(tickets_data)
 
 # Usunięcie użytkownika w panelu admina
 @app.route('/delete_user_ajax/<int:user_id>', methods=['DELETE'])
