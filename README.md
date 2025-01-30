@@ -152,7 +152,7 @@ def redirect_based_on_role(role):
   
 </details>
 
-Dekoratory login_required(f) i role_required(role) sprawdzają, czy użytkownik jest zalogowany oraz czy ma odpowiednią rolę (uprawnienia), aby ją wyświetlić.
+Dekoratory login_required(f) i role_required(role) sprawdzają, czy użytkownik jest zalogowany oraz czy ma odpowiednią rolę (uprawnienia), aby wyświetlić daną stronę.
 
 <details>
   <summary> login_required(f) i role_required(role)</summary>
