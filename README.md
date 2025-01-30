@@ -40,16 +40,57 @@ W celu zapewnienia kompleksowości systemu zarządzania biletami, potencjalni u�
 - edycja danych w profilu użytkownika
 
 ## Uruchomienie aplikacji
+1. Utworzenie wirtualnego środowiska
 ```bash
 python -m venv .env  
+```  
+2. Aktywowanie wirtualnego środowiska
+```bash 
 .\.env\Scripts\activate  
+```
+3. Instalacja wymaganych pakietów
+```bash 
 pip install -r requirements.txt  
+```  
+4. Uruchomienie aplikacji
+```bash 
 python app.py
 ```  
+
+## Struktura folderów
+Pliki projektu zostały podzielone na podfoldery:
+- instance - zawierający bazy danych:
+    - tickets_data.db - zbiór informacji o dostępnych biletach
+    - tickets.db - zbiór informacji o kupionych biletach
+    - users.db - zbiór wszystkich użytkowników systemu
+- static
+    - css - zawierający arkusze stylów
+        - style.css - główny arkusz stylu dla aplikacji
+        - ticket_style.css - arkusz stylu dla komponentu biletu
+    - images - zawierający obrazy
+    - scripts - zawierający skrypty
+- templates - zawierający pliki html z elementami stron jak np. nagłówek, stopka, czy modale
+    - pages - zawierający podstrony aplikacji
+
+Pozostałe pliki w głównym folderze projektu:
+- app.py - główny plik backendowy z konfiguracją aplikacji, definicją baz danych, logiką aplikacji i routingiem
+- README.md - dokumentacja techniczna
+- requirements.txt - plik z wymaganymi do  zainstalowania pakietami
   
 ## Architektura informacji
 <img width="2120" alt="Information Architecture v4" src="https://github.com/user-attachments/assets/b160c3d2-afd7-4054-af92-1114f6584587" />  
-  
+
+## Kolorystyka
+<img width="1778" alt="Colour Palette" src="https://github.com/user-attachments/assets/627ebd31-ce2a-423e-a22a-083c7237cbfb" />
+
+| Kolor  | #HEX | Przeznaczenie |
+| ------------- | ------------- | ------------- |
+| Granatowy | #00305F  | przyciski, tło paska nawigacji, tło stopki |
+| Ciemny szary | #9D9D9C | nieaktywne przyciski |  
+| Jasny szary | #E6E6E6 | tło biletów, tło pól tekstowych, inne tła i elementy dodatkowe | 
+| Zielony | #65A930 | potwierdzenie płatności, przycisk do kupowania biletów, gdy aktywny |
+| Czerwony | #E00726 | błędy, ostrzeżenia |
+ 
 ## Zawartość baz danych  
 ### users.db (w app.py pod klasą User) - zbiór wszystkich użytkowników systemu  
 | Atrybut  | Opis |
@@ -80,18 +121,6 @@ python app.py
 | zone | strefa, w której obowiązuje bilet (wszystkie - "all", pierwsza - "first")  |
 | price | cena biletu  |
 | description | opis biletu  |
-  
-## Kolorystyka
-<img width="1778" alt="Colour Palette" src="https://github.com/user-attachments/assets/627ebd31-ce2a-423e-a22a-083c7237cbfb" />
-
-| Kolor  | #HEX | Przeznaczenie |
-| ------------- | ------------- | ------------- |
-| Granatowy | #00305F  | przyciski, tło paska nawigacji, tło stopki |
-| Ciemny szary | #9D9D9C | nieaktywne przyciski |  
-| Jasny szary | #E6E6E6 | tło biletów, tło pól tekstowych, inne tła i elementy dodatkowe | 
-| Zielony | #65A930 | potwierdzenie płatności, przycisk do kupowania biletów, gdy aktywny |
-| Czerwony | #E00726 | błędy, ostrzeżenia |
-
 
 
 
