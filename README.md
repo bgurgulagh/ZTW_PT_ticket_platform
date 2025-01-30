@@ -60,7 +60,21 @@ pip install -r requirements.txt
 4. Uruchomienie aplikacji
 ```bash 
 python app.py
-```  
+```
+
+## Logowanie do aplikacji  
+W systemie utworzone są 3 konta:  
+### Administrator  
+Login: admin  
+Hasło: admin  
+### Kontroler  
+Login: kontrola  
+Hasło: kontrola  
+### Pasażer  
+Login: user  
+Hasło: user  
+
+Można też utworzyć swoje własne konto, lecz należy pamiętać, że automatycznie zostanie przypisana mu rola "Pasażer". Role w systemie można zmieniać jedynie z poziomu profilu administratora.
 
 ## Struktura folderów
 Pliki projektu zostały podzielone na podfoldery:
