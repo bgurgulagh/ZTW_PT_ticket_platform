@@ -122,6 +122,56 @@ Pozostałe pliki w głównym folderze projektu:
 | price | cena biletu  |
 | description | opis biletu  |
 
+## Logika logowania
+Aplikacja zabezpiecza dostęp do odpowiednich funkcjonalności poprzez rejestrację użytkownika, nadanie mu odpowiedniej roli (pasażera, kontrolera lub admina) i póżniejsze logowanie. 
+
+Funkcja redirect_based_on_role(role) sprawdza rolę użytkownika po zalogowaniu i przekierowuje go do odpowiedniego widoku:
+- admin → widok zarządzania użytkownikami
+- pasażer → widok biletów
+- kontroler → widok kontroli biletów
+
+```bash
+def redirect_based_on_role(role):
+    if role == "admin":
+        return redirect(url_for('admin_uzytkownicy'))
+    elif role == "pasażer":
+        return redirect(url_for('bilety'))
+    elif role == "kontroler":
+        return redirect(url_for('kontroler_kontrola'))
+    else:
+        return redirect(url_for('login'))
+```
+
+Dekoratory login_required(f) i role_required(role) sprawdzają, czy użytkownik jest zalogowany oraz czy ma odpowiednią rolę (uprawnienia), aby ją wyświetlić.
+
+```bash
+from functools import wraps
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            flash("Zaloguj się, aby uzyskać dostęp do tej strony.", "warning")
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+def role_required(role):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if session.get('role') != role:
+                flash("Nie masz uprawnień do tej strony.", "danger")
+                return redirect(url_for('login'))
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
+```
+
+## Obsługa biletów
+
+
+
 
 
 
