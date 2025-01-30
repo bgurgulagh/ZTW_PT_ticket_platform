@@ -135,7 +135,10 @@ Funkcja redirect_based_on_role(role) sprawdza rolę użytkownika po zalogowaniu 
 - pasażer → widok biletów
 - kontroler → widok kontroli biletów
 
-```python
+<details>
+  <summary> redirect_based_on_role(role)</summary>
+  
+  ```python
 def redirect_based_on_role(role):
     if role == "admin":
         return redirect(url_for('admin_uzytkownicy'))
@@ -146,9 +149,14 @@ def redirect_based_on_role(role):
     else:
         return redirect(url_for('login'))
 ```
+  
+</details>
 
 Dekoratory login_required(f) i role_required(role) sprawdzają, czy użytkownik jest zalogowany oraz czy ma odpowiednią rolę (uprawnienia), aby ją wyświetlić.
 
+<details>
+  <summary> login_required(f) i role_required(role)</summary>
+  
 ```python
 from functools import wraps
 
@@ -172,12 +180,17 @@ def role_required(role):
         return decorated_function
     return decorator
 ```
+  
+</details>
 
 ## Obsługa biletów
 
 ### Kupowanie biletu
 Podczas zakupu biletu tworzony jest nowy bilet, dla którego generowany jest unikalny token. Do biletu przypisywane są również informacje o czasie zakupu biletu oraz username użytkownika, który go kupił. Bilet jest zapisywany do bazy danych. Wyświetlany jest komunikat z informacją o pomyślnie kupionym bilecie. 
 
+<details>
+  <summary> buy_ticket()</summary>
+  
 ```python
 # Kupowanie biletów
 @app.route('/buy_ticket', methods=['POST'])
@@ -211,10 +224,15 @@ def buy_ticket():
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
 ```
+  
+</details>
 
 ### Wyświetlanie kupionych biletów pasażera
 Zakupione przez pasażera bilety są podzielone na dwie kategorie: aktywne i nieaktywne. Dla każdego biletu sprawdzana jest data zakupui i czas ważności biletu. Na tej podstawie obliczany jest pozostały czas dla biletów aktywnych lub bilet zostaje sklasyfikowany jako nieważny. Interfejs pokazuje informacje o statusie biletu oraz pozostałym do końca ważności czasie.
 
+<details>
+  <summary> get_user_tickets()</summary>
+  
 ```python
 # Sprawdzanie zakupionych biletów
 @app.route('/get_user_tickets')
@@ -275,10 +293,15 @@ def get_user_tickets():
 
     return jsonify({"active": active_tickets, "inactive": inactive_tickets})
 ```
+  
+</details>
 
 ### Kontrola biletów przez kontrolera
 W celu sprawdzenia ważności biletu przez kontrolera, potrzebne jest podanie unikalnego tokenu, który generowany jest przy zakupie biletu. Na podstawie czasu zakupienia biletu oraz czasu ważności biletu, obliczane jest, czy bilet jest ważny. Jeśli tak, obliczane jest, ile pozostało czasu do końca jego ważności. Interfejs wyświetla odpowiedni komunikat dla kontrolera.
 
+<details>
+  <summary> check_ticket()</summary>
+  
 ```python
 # Kontrola biletów
 @app.route('/check_ticket', methods=['POST'])
@@ -324,5 +347,5 @@ def check_ticket():
     else:
         return jsonify({"success": False, "message": "Bilet jest nieważny."})
 ```
-
-
+  
+</details>
