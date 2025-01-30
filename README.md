@@ -349,3 +349,77 @@ def check_ticket():
 ```
   
 </details>
+
+## Instrukcja dla użytkowników
+
+### Ogólne
+
+Aby móc korzystać z aplikacji konieczne jest zalogowanie się zarejestrowanego użytkownika za pomocą poprawnego loginu i hasła. Po zalogowaniu się, nawigacja po aplikacji odbywa się przy wykorzystaniu menu nawigacji na górze strony.
+
+![Zrzut ekranu 2025-01-30 223011](https://github.com/user-attachments/assets/f8c8ccf9-ab1f-4f9f-9720-8354d4fc3b81)
+
+### Instrukcja dla pasażerów
+
+**Rejestracja**
+
+Pasażer może utworzyć konto, podając swoje dane: imię, nazwisko, nazwę użytkownika, adres e-mail oraz tworząc dla siebie hasło.
+
+![Zrzut ekranu 2025-01-30 223003](https://github.com/user-attachments/assets/aea12375-8812-455c-807a-21c0d0e27827)
+
+
+**Moje bilety**
+
+Po zalogowaniu, pasażer zobaczy stronę ze swoimi biletami. Są one podzielone na bilety aktywne oraz nieaktywne. Dla biletów aktywnych wyświetla się informacja o pozostałym czasie ich ważności. Kliknięcie w bilet umożliwia jego pokazanie do kontroli.
+
+![Zrzut ekranu 2025-01-30 223227](https://github.com/user-attachments/assets/7386edd0-cf8c-4eb1-bf65-22f0fe6e25aa)
+
+
+**Kup bilet**
+
+Na podstronie kup bilet, pasażer może przeglądać wszystkie dostępne do kupienia bilety. Może wybrać liczbę biletów każdego rodzaju, które chce kupić. U góry strony wyświetla się suma do zapłaty. Po kliknięciu w przycisk "Kup i skasuj bilet", wybrane bilety pojawią się na stronie "Moje bilety".
+
+![Zrzut ekranu 2025-01-30 223246](https://github.com/user-attachments/assets/63660914-80ae-46ee-82a7-7892f868cc12)
+
+
+**Mój profil**
+
+W profilu znajdują się informacje personalne użytkownika. Klikając w przycisk edycji, pasażer ma możliwość zmiany swoich danych, zresetowania hasła oraz trwałego usunięcia konta. W profilu znajduje się również przycisk umożliwiający wylogowanie się.
+
+![Zrzut ekranu 2025-01-30 223258](https://github.com/user-attachments/assets/7665760a-c18f-4173-8291-4271960b02d6)
+
+
+### Instrukcja dla kontrolerów
+
+**Kontrola biletów**
+
+Aby skontrolować bilet pasażera w czasie kontroli, należy wpisać numer ID biletu. Na tej podstawie zostanie wyświetlony odpowiedni komunikat o statusie ważności biletu.
+
+**Mój profil**
+
+W profilu znajdują się informacje personalne użytkownika. Kontroler nie ma możliwości edycji sowich danych, zajmuje się tym administrator. W profilu znajduje się przycisk umożliwiający wylogowanie się.
+
+
+### Instrukcja dla administratorów
+
+**Użytkownicy**
+
+Podstrona Użytkownicy zawiera bazę z wszystkimi użytkownikami platformy. Filtry umożliwiają filtrowanie użytkowników po imieniu, nazwisku, loginie oraz roli. Przycik "Dodaj użytkownika" pozwala na utworzenie nowego konta poprzez podanie niezbędnych do tego celu danych. Przy każdym użytkowniku znajduje się również opcja edycji jego danych oraz usunięcia konta. W edycji danych możliwe jest zresetowanie hasła użytkownika. Kliknięcie tego przycisku powoduje wysłanie maila do użytkownika ze zmianą hasła.
+
+![Zrzut ekranu 2025-01-30 223044](https://github.com/user-attachments/assets/7027065d-13c4-4a82-9d71-eb6da6122640)
+
+
+![Zrzut ekranu 2025-01-30 223101](https://github.com/user-attachments/assets/3cb50c39-991d-4ce7-b913-a289afcbdb74)
+
+
+**Bilety**
+
+Podstrona Bilety zawiera bazę z wszystkimi biletami możliwymi do kupienia. Filtry umożliwiają filtrowanie biletów po taryfach oraz strefach. Przycik "Dodaj bilet" pozwala na utworzenie nowego biletu poprzez podanie niezbędnych do tego celu danych. Przy każdym bilecie znajduje się również opcja edycji jego danych oraz usunięcia biletu z bazy. 
+
+![Zrzut ekranu 2025-01-30 223139](https://github.com/user-attachments/assets/182b57c9-52d9-460a-86c3-39616d12d5e7)
+
+
+**Mój profil**
+
+W profilu znajdują się informacje personalne użytkownika. Klikając w przycisk edycji, administrator ma możliwość zmiany swoich danych, zresetowania hasła oraz trwałego usunięcia konta. W profilu znajduje się również przycisk umożliwiający wylogowanie się.
+
+![Zrzut ekranu 2025-01-30 230426](https://github.com/user-attachments/assets/adca3f7c-134f-45b0-a068-be7256cf4d7e)
