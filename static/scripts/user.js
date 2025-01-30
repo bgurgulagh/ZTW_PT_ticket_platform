@@ -1,5 +1,5 @@
 // Usuwanie użytkownika
-$(document).ready(function() {
+function del_user() {
     $(".delete-user").click(function() {
         let userId = $(this).data("user-id");
 
@@ -21,10 +21,10 @@ $(document).ready(function() {
             });
         }
     });
-});
+}
 
 // Edytowanie użytkownika
-$(document).ready(function() {
+function edit_user() {
     $(".edit-user").click(function() {
         let userId = $(this).data("user-id");
         $("#editUserId").val(userId);
@@ -64,7 +64,7 @@ $(document).ready(function() {
             }
         });
     });
-});
+}
 
 // Generowanie hasła jako ciągu znaków
 function generatePassword(length) {
@@ -105,7 +105,7 @@ document.getElementById('resetPasswordBtn').addEventListener('click', function()
 });
 
 // Dodawanie użytkownika
-$(document).ready(function() {
+function add_user() {
     $("#addUserBtn").click(function() {
         $("#addUserModal").modal("show");
     });
@@ -138,6 +138,13 @@ $(document).ready(function() {
             }
         });
     });
+}
+
+$(document).ready(function() {
+    del_user()
+    edit_user()
+    add_user()
+
 });
 
 // Filtrowanie użytkowników
@@ -193,12 +200,16 @@ $(document).ready(function() {
                         `;
                         tbody.append(row);
                     });
+                    del_user()
+                    edit_user()
+                    add_user()
                 }
             },
             error: function() {
                 alert("Wystąpił błąd podczas filtrowania.");
             }
         });
+        
     });
 
     $("#resetBtn").click(function() {
