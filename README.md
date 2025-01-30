@@ -2,7 +2,7 @@
 
 ## Wstęp
 ### Opis projektu
-Aplikacja webowa powstała z myślą o zarządzaniu biletami komunikacji miejskiej. System pozwala na rejestrację oraz logowanie użytkowników, zakup i przeglądanie posiadanych przez pasażerów biletów, kontrolę biletów oraz zarządzanie bazami biletów oraz wszystkich użytkowników z poziomu administratora. 
+Aplikacja webowa powstała z myślą o zarządzaniu biletami komunikacji miejskiej. System pozwala na rejestrację oraz logowanie użytkowników, zakup i przeglądanie posiadanych przez pasażerów biletów, kontrolę biletów oraz zarządzanie bazami biletów oraz wszystkich użytkowników z poziomu administratora. Aplikacja jest responsywna, dostosowana do róznych wielkości ekranów, tak by mogła być używana zarówno z użyciem komputera jak i telefonu.
 
 ### Opis funkcjonalności
 W celu zapewnienia kompleksowości systemu zarządzania biletami, potencjalni użytkownicy aplikacji zostali podzieleni na trzy grupy: pasażerów, kontrolerów oraz administratorów. Dostępne funkcjonalności różnią się ze względu na posiadaną przez użytkownika rolę.
@@ -38,6 +38,11 @@ W celu zapewnienia kompleksowości systemu zarządzania biletami, potencjalni u�
   - usunięcie użytkownika 
 - przegląd danych w profilu użytkownika
 - edycja danych w profilu użytkownika
+
+## Wykorzystane technologie
+Frontend: JavaScript, HTML, CSS, Bootstrap, jQuery
+Backend: Flask
+Baza danych: SQLAlchemy
 
 ## Uruchomienie aplikacji
 1. Utworzenie wirtualnego środowiska
@@ -130,7 +135,7 @@ Funkcja redirect_based_on_role(role) sprawdza rolę użytkownika po zalogowaniu 
 - pasażer → widok biletów
 - kontroler → widok kontroli biletów
 
-```bash
+```python
 def redirect_based_on_role(role):
     if role == "admin":
         return redirect(url_for('admin_uzytkownicy'))
@@ -144,7 +149,7 @@ def redirect_based_on_role(role):
 
 Dekoratory login_required(f) i role_required(role) sprawdzają, czy użytkownik jest zalogowany oraz czy ma odpowiednią rolę (uprawnienia), aby ją wyświetlić.
 
-```bash
+```python
 from functools import wraps
 
 def login_required(f):
@@ -170,8 +175,154 @@ def role_required(role):
 
 ## Obsługa biletów
 
+### Kupowanie biletu
+Podczas zakupu biletu tworzony jest nowy bilet, dla którego generowany jest unikalny token. Do biletu przypisywane są również informacje o czasie zakupu biletu oraz username użytkownika, który go kupił. Bilet jest zapisywany do bazy danych. Wyświetlany jest komunikat z informacją o pomyślnie kupionym bilecie. 
 
+```python
+# Kupowanie biletów
+@app.route('/buy_ticket', methods=['POST'])
+def buy_ticket():
+    try:
+        tickets = request.json
+        if not tickets:
+            return jsonify({"success": False, "message": "Brak danych do zapisania"}), 400
 
+        validation_time = datetime.now()
+        username = g.user.username
 
+        new_tickets = []
+        for ticket in tickets:
+            token = generate_unique_token()
+            new_ticket = Ticket(
+                validation=validation_time,
+                token=token,
+                username=username,
+                time=ticket['time'],
+                tariff=ticket['tariff'],
+                zone=ticket['zone'],
+                description=ticket['description']
+            )
+            new_tickets.append(new_ticket)
+
+        db.session.add_all(new_tickets)
+        db.session.commit()
+
+        return jsonify({"success": True, "message": f"Zapisano {len(new_tickets)} biletów"}), 200
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+```
+
+### Wyświetlanie kupionych biletów pasażera
+Zakupione przez pasażera bilety są podzielone na dwie kategorie: aktywne i nieaktywne. Dla każdego biletu sprawdzana jest data zakupui i czas ważności biletu. Na tej podstawie obliczany jest pozostały czas dla biletów aktywnych lub bilet zostaje sklasyfikowany jako nieważny. Interfejs pokazuje informacje o statusie biletu oraz pozostałym do końca ważności czasie.
+
+```python
+# Sprawdzanie zakupionych biletów
+@app.route('/get_user_tickets')
+def get_user_tickets():
+    username = g.user.username
+    tickets = Ticket.query.filter_by(username=username).all()
+
+    active_tickets = []
+    inactive_tickets = []
+    current_time = datetime.now()
+
+    for ticket in tickets:
+        validation_time = ticket.validation
+        allowed_duration = parse_time(ticket.time)
+        remaining_time = ""
+        is_valid = False
+
+        if allowed_duration:
+            time_diff = allowed_duration - (current_time - validation_time)
+            if time_diff.total_seconds() > 0:
+                is_valid = True
+                days, rem = divmod(time_diff.total_seconds(), 86400)
+                hours, rem = divmod(rem, 3600)
+                minutes = rem // 60
+
+                if days >= 2:
+                    remaining_time = f"{int(days)} dni, {int(hours)} h {int(minutes)} min"
+                elif days >= 1:
+                    remaining_time = f"{int(days)} dzień, {int(hours)} h {int(minutes)} min"
+                elif hours >= 1:
+                    remaining_time = f"{int(hours)} h {int(minutes)} min"
+                else:
+                    remaining_time = f"{int(minutes)} min"
+            else:
+                remaining_time = "Nieważny"
+
+        buy_time = validation_time.strftime("%d.%m.%Y %H:%M")
+
+        ticket_data = {
+            "id": ticket.id,
+            "time": ticket.time,
+            "tariff": ticket.tariff,
+            "zone": ticket.zone,
+            "description": ticket.description,
+            "buy_time": buy_time,
+            "remaining_time": remaining_time,
+            "remaining_seconds": time_diff.total_seconds() if is_valid else -1,
+            "is_valid": is_valid,
+        }
+
+        if is_valid:
+            active_tickets.append(ticket_data)
+        else:
+            inactive_tickets.append(ticket_data)
+
+    active_tickets.sort(key=lambda x: x["remaining_seconds"])
+    inactive_tickets.sort(key=lambda x: x["buy_time"], reverse=True)
+
+    return jsonify({"active": active_tickets, "inactive": inactive_tickets})
+```
+
+### Kontrola biletów przez kontrolera
+W celu sprawdzenia ważności biletu przez kontrolera, potrzebne jest podanie unikalnego tokenu, który generowany jest przy zakupie biletu. Na podstawie czasu zakupienia biletu oraz czasu ważności biletu, obliczane jest, czy bilet jest ważny. Jeśli tak, obliczane jest, ile pozostało czasu do końca jego ważności. Interfejs wyświetla odpowiedni komunikat dla kontrolera.
+
+```python
+# Kontrola biletów
+@app.route('/check_ticket', methods=['POST'])
+def check_ticket():
+    data = request.get_json()
+    token = data.get('token')
+
+    if not token:
+        return jsonify({"success": False, "message": "Proszę podać ID biletu."})
+
+    ticket = Ticket.query.filter_by(token=token).first()
+    if not ticket:
+        return jsonify({"success": False, "message": "Bilet nie istnieje."})
+
+    current_time = datetime.now()
+    time_difference = current_time - ticket.validation
+    allowed_duration = parse_time(ticket.time)
+
+    print(f"Ticket time: {ticket.time}")
+    print(f"Validation time: {ticket.validation}")
+    print(f"Current time: {current_time}")
+    print(f"Time difference: {time_difference}")
+    print(f"Allowed duration: {allowed_duration}")
+
+    if allowed_duration and time_difference.total_seconds() <= allowed_duration.total_seconds():
+        remaining_time = allowed_duration - time_difference
+
+        # Oblicz dni, godziny i minuty
+        remaining_days = remaining_time.days
+        remaining_seconds = remaining_time.seconds
+        remaining_hours = remaining_seconds // 3600
+        remaining_minutes = (remaining_seconds % 3600) // 60
+
+        # Tworzenie komunikatu
+        if remaining_days > 0:
+            message = f"Bilet jest ważny, pozostało {remaining_days} dni, {remaining_hours} godzin i {remaining_minutes} minut."
+        elif remaining_hours > 0:
+            message = f"Bilet jest ważny, pozostało {remaining_hours} godzin i {remaining_minutes} minut."
+        else:
+            message = f"Bilet jest ważny, pozostało {remaining_minutes} minut."
+
+        return jsonify({"success": True, "message": message})
+    else:
+        return jsonify({"success": False, "message": "Bilet jest nieważny."})
+```
 
 
