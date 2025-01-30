@@ -20,10 +20,20 @@
           <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
               <h3 class="mb-0">{{ gUser.name }} {{ gUser.surname}}</h3>
-              {% if gUser.role != 'kontroler' %}
-              <button class="btn btn-light btn-sm">
-                <i class="bi bi-pencil"></i>
-              </button>
+              {% if gUser.role == 'admin' or gUser.role == 'pasażer' %}
+              <div id="editButton">
+                <button
+                  class="btn btn-sm btn-outline-primary edit-user"
+                  data-user-id="{{ gUser.id }}"
+                  data-name="{{ gUser.name }}"
+                  data-surname="{{ gUser.surname }}"
+                  data-username="{{ gUser.username }}"
+                  data-email="{{ gUser.email }}"
+                  data-role="{{ gUser.role }}"
+                >
+                  <i class="bi bi-pencil"></i>
+                </button>
+              </div>
               {% endif %}
             </div>
           </div>
@@ -48,28 +58,16 @@
           </div>
         </div>
       </div>
-
-      <!-- gdyby się dało to wyświtlić po kliknięciu w ikonkę edycji
-      <div class="container-xl mt-1 py-3 px-4">
-        <div class="row mb-1">
-          <h3>Usuwanie konta</h3>
-        </div>
-        <div class="row mb-1">
-          <div class="col-xl-4 col-md-6">
-            Po kliknięciu w przycisk, twoje konto zostanie trwale usunięte.
-          </div>
-        </div>
-        <div class="mt-2">
-          <button class="btn btn-danger">Usuń konto</button>
-        </div>
-      -->  
     </section>
   </div>
-  {% include 'footer.html' %}
+  <!-- Pop up edycji użytkownika -->
+  {% include 'profile_edit_modal.html' %} {% include 'footer.html' %}
 
   <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"
   ></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="../static/scripts/user.js"></script>
 </body>

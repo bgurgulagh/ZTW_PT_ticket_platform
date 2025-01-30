@@ -29,14 +29,13 @@
             <label for="editEmail" class="form-label">Email</label>
             <input type="email" class="form-control" id="editEmail" />
           </div>
-          <!-- <div class="mb-3">
-                        <label for="editRole" class="form-label">Rola</label>
-                        <select class="form-control form-select" id="editRole">
-                            <option value="admin">Admin</option>
-                            <option value="kontroler">Kontroler</option>
-                            <option value="pasażer">Pasażer</option>
-                        </select>
-                    </div> -->
+          <input
+            type="hidden"
+            class="form-control"
+            id="editRole"
+            value="{{gUser.role}}"
+          />
+
           <div class="mb-3">
             <label for="resetPassword" class="form-label">Reset hasła</label
             ><br />
@@ -47,6 +46,26 @@
             >
               Resetuj hasło użytkownika
             </button>
+          </div>
+
+          <div class="mb-3">
+            <label for="deleteUser" class="form-label"
+              ><h3>Usuwanie konta</h3></label
+            ><br />
+            <p>
+              Po kliknięciu w przycisk, twoje konto zostanie trwale usunięte.
+            </p>
+
+            <div class="mt-2">
+              <button
+                type="button"
+                class="btn btn-danger delete-user"
+                data-user-id="{{ gUser.id }}"
+                id="deleteUserBtn"
+              >
+                Usuń konto
+              </button>
+            </div>
           </div>
         </form>
       </div>
