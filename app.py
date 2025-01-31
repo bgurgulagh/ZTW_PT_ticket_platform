@@ -274,7 +274,7 @@ def filter_tickets():
     if tariff:
         query = query.filter(TicketData.tariff.ilike(f"%{tariff}%"))
     if zone:
-        zone = query.filter(TicketData.zone.ilike(f"%{zone}%"))
+        query = query.filter(TicketData.zone.ilike(f"%{zone}%"))
 
     tickets = query.all()
     tickets_data = [

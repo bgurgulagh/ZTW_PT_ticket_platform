@@ -1,5 +1,5 @@
 // Usuwanie biletu
-$(document).ready(function() {
+function del_ticket() {
     $(".delete-ticket").click(function() {
         let ticketId = $(this).data("ticket-id");
 
@@ -21,10 +21,10 @@ $(document).ready(function() {
             });
         }
     });
-});
+}
 
 // Edytowanie biletu
-$(document).ready(function() {
+function edit_ticket() {
     $(".edit-ticket").click(function() {
         let ticketId = $(this).data("ticket-id");
     
@@ -66,10 +66,10 @@ $(document).ready(function() {
             }
         });
     });
-});
+}
 
 // Dodawanie biletu
-$(document).ready(function() {
+function add_ticket() {
     $("#addTicketBtn").click(function() {
         $("#addTicketModal").modal("show");
     });
@@ -101,6 +101,12 @@ $(document).ready(function() {
             }
         });
     });
+}
+
+$(document).ready(function() {
+    del_ticket()
+    edit_ticket()
+    add_ticket()
 });
 
 // Filtrowanie biletów
@@ -133,13 +139,13 @@ $(document).ready(function() {
                                 <td>${ticket.price}</td>
                                 <td>${ticket.description}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-primary edit-user" 
-                                            data-user-id="${ticket.id}" 
-                                            data-name="${ticket.time}"
-                                            data-surname="${ticket.tariff}"
-                                            data-username="${ticket.zone}"
-                                            data-email="${ticket.price}"
-                                            data-role="${ticket.description}">
+                                    <button class="btn btn-sm btn-outline-primary edit-ticket" 
+                                            data-ticket-id="${ticket.id}" 
+                                            data-time="${ticket.time}"
+                                            data-tariff="${ticket.tariff}"
+                                            data-zone="${ticket.zone}"
+                                            data-price="${ticket.price}"
+                                            data-description="${ticket.description}">
                                         <i class="bi bi-pencil"></i>
                                     </button>
                                 </td>
@@ -152,6 +158,9 @@ $(document).ready(function() {
                         `;
                         tbody.append(row);
                     });
+                    del_ticket();
+                    edit_ticket();
+                    add_ticket();
                 }
             },
             error: function() {
