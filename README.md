@@ -376,7 +376,7 @@ Aby móc korzystać z aplikacji konieczne jest zalogowanie się zarejestrowanego
 
 **Rejestracja**
 
-Pasażer może utworzyć konto, podając swoje dane: imię, nazwisko, nazwę użytkownika, adres e-mail oraz tworząc dla siebie hasło.
+Pasażer może utworzyć konto, podając swoje dane: imię, nazwisko, nazwę użytkownika, adres e-mail oraz tworząc dla siebie hasło. Po utworzeniu konta, użytkownik otrzyma maila potwierdzającego.
 
 ![Zrzut ekranu 2025-01-30 223003](https://github.com/user-attachments/assets/aea12375-8812-455c-807a-21c0d0e27827)
 
@@ -385,7 +385,7 @@ Pasażer może utworzyć konto, podając swoje dane: imię, nazwisko, nazwę uż
 
 Po zalogowaniu, pasażer zobaczy stronę ze swoimi biletami. Są one podzielone na bilety aktywne oraz nieaktywne. Dla biletów aktywnych wyświetla się informacja o pozostałym czasie ich ważności. Kliknięcie w bilet umożliwia jego pokazanie do kontroli.
 
-![Zrzut ekranu 2025-01-30 223227](https://github.com/user-attachments/assets/7386edd0-cf8c-4eb1-bf65-22f0fe6e25aa)
+![Zrzut ekranu 2025-01-31 155843](https://github.com/user-attachments/assets/71710a5c-a1a9-4a05-8136-8a47babc38a6)
 
 
 **Kup bilet**
@@ -399,7 +399,7 @@ Na podstronie kup bilet, pasażer może przeglądać wszystkie dostępne do kupi
 
 W profilu znajdują się informacje personalne użytkownika. Klikając w przycisk edycji, pasażer ma możliwość zmiany swoich danych, zresetowania hasła oraz trwałego usunięcia konta. W profilu znajduje się również przycisk umożliwiający wylogowanie się.
 
-![Zrzut ekranu 2025-01-30 223258](https://github.com/user-attachments/assets/7665760a-c18f-4173-8291-4271960b02d6)
+![Zrzut ekranu 2025-01-31 160551](https://github.com/user-attachments/assets/a14113ee-0af4-4b26-87c6-38ab9e83bbac)
 
 
 ### Instrukcja dla kontrolerów
@@ -408,9 +408,17 @@ W profilu znajdują się informacje personalne użytkownika. Klikając w przycis
 
 Aby skontrolować bilet pasażera w czasie kontroli, należy wpisać numer ID biletu. Na tej podstawie zostanie wyświetlony odpowiedni komunikat o statusie ważności biletu.
 
+![Zrzut ekranu 2025-01-31 155818](https://github.com/user-attachments/assets/861be55f-8e5b-4f15-8da2-6e7a4ad2c7d6)
+
+
+![Zrzut ekranu 2025-01-31 155907](https://github.com/user-attachments/assets/8d78cdc4-b4c8-464d-8c57-b51e3f2c6449)
+
+
 **Mój profil**
 
 W profilu znajdują się informacje personalne użytkownika. Kontroler nie ma możliwości edycji sowich danych, zajmuje się tym administrator. W profilu znajduje się przycisk umożliwiający wylogowanie się.
+
+![Zrzut ekranu 2025-01-31 160612](https://github.com/user-attachments/assets/8f09e2fb-4252-4d07-b6e8-ec61966979bf)
 
 
 ### Instrukcja dla administratorów
@@ -419,10 +427,10 @@ W profilu znajdują się informacje personalne użytkownika. Kontroler nie ma mo
 
 Podstrona Użytkownicy zawiera bazę z wszystkimi użytkownikami platformy. Filtry umożliwiają filtrowanie użytkowników po imieniu, nazwisku, loginie oraz roli. Przycik "Dodaj użytkownika" pozwala na utworzenie nowego konta poprzez podanie niezbędnych do tego celu danych. Przy każdym użytkowniku znajduje się również opcja edycji jego danych oraz usunięcia konta. W edycji danych możliwe jest zresetowanie hasła użytkownika. Kliknięcie tego przycisku powoduje wysłanie maila do użytkownika ze zmianą hasła.
 
-![Zrzut ekranu 2025-01-30 223044](https://github.com/user-attachments/assets/7027065d-13c4-4a82-9d71-eb6da6122640)
+![Zrzut ekranu 2025-01-31 155658](https://github.com/user-attachments/assets/856327c7-bb7c-4cd5-bdc0-fc22ea94757d)
 
 
-![Zrzut ekranu 2025-01-30 223101](https://github.com/user-attachments/assets/3cb50c39-991d-4ce7-b913-a289afcbdb74)
+![Zrzut ekranu 2025-01-31 155722](https://github.com/user-attachments/assets/7a724e55-5876-4904-a843-6c5334254ad9)
 
 
 **Bilety**
