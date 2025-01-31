@@ -90,7 +90,9 @@ function edit_profile() {
             email: $("#editEmail").val(),
             role: $("#editRole").val()
         };
-
+        if(updatedData.password == ''){
+            alert("Nie można zapisać pustego hasła.");
+        }else{
         $.ajax({
             url: "/update_profile_ajax/" + userId,
             type: "POST",
@@ -108,6 +110,7 @@ function edit_profile() {
                 alert("Wystąpił problem podczas aktualizacji.");
             }
         });
+        }
     });
 }
 
