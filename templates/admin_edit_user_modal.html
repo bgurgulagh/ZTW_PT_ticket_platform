@@ -1,0 +1,63 @@
+<div id="editUserModal" class="modal fade" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edytuj użytkownika</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="editUserForm">
+          <input type="hidden" id="editUserId" />
+          <div class="mb-3">
+            <label for="editName" class="form-label">Imię</label>
+            <input type="text" class="form-control" id="editName" />
+          </div>
+          <div class="mb-3">
+            <label for="editSurname" class="form-label">Nazwisko</label>
+            <input type="text" class="form-control" id="editSurname" />
+          </div>
+          <div class="mb-3">
+            <label for="editUsername" class="form-label">Login</label>
+            <input type="text" class="form-control" id="editUsername" />
+          </div>
+          <div class="mb-3">
+            <label for="editEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="editEmail" />
+          </div>
+          <div class="mb-3">
+            <label for="editRole" class="form-label">Rola</label>
+            <select class="form-control form-select" id="editRole">
+              <option value="admin">Admin</option>
+              <option value="kontroler">Kontroler</option>
+              <option value="pasażer">Pasażer</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="resetPassword" class="form-label">Reset hasła</label
+            ><br />
+            <button
+              type="button"
+              class="btn btn-outline-primary"
+              id="resetPasswordBtn"
+            >
+              Resetuj hasło użytkownika
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Anuluj
+        </button>
+        <button type="button" class="btn btn-primary" id="saveUserChanges">
+          Zapisz zmiany
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

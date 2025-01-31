@@ -1,0 +1,50 @@
+{% include 'header.html' %}
+
+<body>
+  <div class="main-content">
+    {% include 'navbar.html' %}
+
+    <section id="header_name">
+      <div class="container-xl mt-4 py-3 px-4">
+        <div id="buy_tickets_header">
+          <h1 class="display-4">{{ header if header else '' }}</h1>
+          <div id="ticket_buy_summary">
+            <div id="transaction_cost">
+              <p id="transaction_cost_label">Kwota do<br />zapłaty:</p>
+              <p id="transaction_cost_cost">0,00zł</p>
+            </div>
+            <button id="btn_transaction_confirm">Kup i skasuj</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tickets">
+      <div class="container-xl mt-4 py-3 px-4">
+        <div id="section_name">
+          <h2 class="mb-0">Bilety normalne</h2>
+        </div>
+        <div id="section_divider"></div>
+        <div id="ticket_container_normal"></div>
+      </div>
+    </section>
+    <section id="tickets">
+      <div class="container-xl mt-4 py-3 px-4">
+        <div id="section_name">
+          <h2 class="mb-0">Bilety ulgowe</h2>
+        </div>
+        <div id="section_divider"></div>
+        <div id="ticket_container_discount"></div>
+      </div>
+    </section>
+  </div>
+
+  {% include 'footer.html' %}
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"
+  ></script>
+  <script src="../static/scripts/ticket.js"></script>
+</body>

@@ -1,3 +1,10 @@
+*{
+    font-family: 'Figtree', sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+    text-decoration: none;
+}
+
 html, body {
     height: 100%;
 }
@@ -5,7 +12,7 @@ html, body {
 body {
     display: flex;
     flex-direction: column;
-    font-family: 'Figtree', 'Segoe UI', Tahoma, Verdana, sans-serif;
+    padding-top: 70px;
 }
 
 .main-content {
@@ -13,24 +20,192 @@ body {
 }
 
 .footer {
-    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: 15px;
+    margin-top: 30px;
+}
+
+#footer {
+    color: white;
+}
+
+#footer_by {
+    color: white;
+    font-size: 10px;
 }
 
 .navbar, .footer {
-background-color: #002F5D;
+    background-color: #00305F;
 }
 
-.btn{
-    background-color: #002F5D;
-    border: 0;
+.navbar-nav {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
 }
+
+.navbar-toggler {
+    padding-right: 4px;
+    padding-left: 4px;
+    border: none;
+}
+
+.navbar-toggler:focus, .navbar-toggler:active {
+    outline: none;
+    box-shadow: none;
+}
+
+#buy_tickets_header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#transaction_cost {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#transaction_cost_label {
+    font-size: 20px;
+}
+
+#transaction_cost_cost {
+    font-size: 40px;
+    font-weight: 700;
+}
+
+#btn_transaction_confirm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #65A930;
+    width: 100%;
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+#ticket_buy_summary {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 15px;
+    gap: 30px;
+    width: 600px;
+    height: 100px;
+}
+
+#ticket_container, #inactive_ticket_container, #ticket_container_normal, #ticket_container_discount {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+    gap: 30px;
+    margin-bottom: 20px;
+    margin-top: 30px;
+}
+
+#inactive_ticket_container #ticket_remaining_section {
+    background-color: #9D9D9C;
+}
+
+#inactive_ticket_container #ticket_remaining, #inactive_ticket_container #ticket_validation_info_section {
+    display: none;
+}
+
+#inactive_ticket_container .ticket {
+    cursor: default;
+    pointer-events: none;
+}
+
+.btn-primary {
+    background-color: #00305F;
+    border-color: #00305F;
+}
+
+.btn-primary:hover {
+    background-color: #0063AF;
+    border-color: #0063AF;
+}
+
+.btn-outline-primary {
+    border-color: #00305F;
+    color: #00305F;
+}
+
+.btn-outline-primary:hover {
+    background-color: #0063AF;
+    border-color: #0063AF;
+}
+
+#label {
+    font-weight: 700;
+}
+
+#section_name {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#section_divider {
+    background-color: #00305F;
+    height: 3px;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#token_check_section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#token_display {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    margin-top: 40px;
+}
+
+#ticket_validation {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+}
+
+#ticket_validation_form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
+#time_signature {
+    margin-top: 30px;
+}
+
+#signature_current_time {
+    font-weight: 700;
+}
+
 /* login */
 #login {
     margin-top: 50px;
-}
-
-#login .container-lg {
-    max-width: 500px;
 }
 
 form .form-control {
@@ -42,23 +217,20 @@ form .form-control {
 }
 /* koniec login */
 
-/* przykładowy tickets.html */
-#tickets .ticket {
-    background-color: #f9f9f9;
+#tickets .ticket, #ticket_buy_summary {
+    background-color: #E6E6E6;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    margin-bottom: 20px;
 }
 
 #tickets .ticket-header {
     font-size: 1.5rem;
-    font-weight: bold;
-    color: #002f5d;
+    font-weight: 700;
+    color: #00305F;
 }
 
 #tickets .ticket-body {
     font-size: 1.1rem;
-    color: #555;
+    color: #9D9D9C;
 }
-/* koniec przykładowy tickets.html */
