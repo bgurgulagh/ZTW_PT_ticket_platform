@@ -195,6 +195,14 @@ body {
     width: 100%;
 }
 
+#time_signature {
+    margin-top: 30px;
+}
+
+#signature_current_time {
+    font-weight: 700;
+}
+
 /* login */
 #login {
     margin-top: 50px;

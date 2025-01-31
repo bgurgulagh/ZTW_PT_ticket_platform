@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
+from functools import wraps
 import random, string, re, json
 
 app = Flask(__name__)
@@ -135,8 +136,6 @@ def logout():
     session.clear()
     flash("Zostałeś wylogowany.", "info")
     return redirect(url_for('login'))
-
-from functools import wraps
 
 def login_required(f):
     @wraps(f)
@@ -318,9 +317,12 @@ def update_user_ajax(user_id):
 
     db.session.commit()
 
-    msg = Message("Dane konta w Portalu Pasażera KMK", recipients=[data.get('email')])
-    msg.body = f"Twoje dane w Profilu Pasażera KMK uległy zmianie.\n\nAktualne dane Twojego konta znajdziesz poniżej:\n\nLogin: {data.get('username')}\nImię: {data.get('name')}\nNazwisko: {data.get('surname')}\nRola: {data.get('role')}"
-    mail.send(msg)
+    try:
+        msg = Message("Dane konta w Portalu Pasażera KMK", recipients=[data.get('email')])
+        msg.body = f"Twoje dane w Profilu Pasażera KMK uległy zmianie.\n\nAktualne dane Twojego konta znajdziesz poniżej:\n\nLogin: {data.get('username')}\nImię: {data.get('name')}\nNazwisko: {data.get('surname')}\nRola: {data.get('role')}"
+        mail.send(msg)
+    except:
+        print("Nie udało się wysłać powiadomienia e-mail")
 
     return jsonify({"success": True})
 
@@ -341,9 +343,12 @@ def update_profile_ajax(user_id):
 
     db.session.commit()
 
-    msg = Message("Dane konta w Portalu Pasażera KMK", recipients=[data.get('email')])
-    msg.body = f"Twoje dane w Profilu Pasażera KMK uległy zmianie.\n\nAktualne dane Twojego konta znajdziesz poniżej:\n\nLogin: {data.get('username')}\nImię: {data.get('name')}\nNazwisko: {data.get('surname')}\nRola: {data.get('role')}"
-    mail.send(msg)
+    try:
+        msg = Message("Dane konta w Portalu Pasażera KMK", recipients=[data.get('email')])
+        msg.body = f"Twoje dane w Profilu Pasażera KMK uległy zmianie.\n\nAktualne dane Twojego konta znajdziesz poniżej:\n\nLogin: {data.get('username')}\nImię: {data.get('name')}\nNazwisko: {data.get('surname')}\nRola: {data.get('role')}"
+        mail.send(msg)
+    except:
+        print("Nie udało się wysłać powiadomienia e-mail")
 
     return jsonify({"success": True})
 
@@ -363,9 +368,12 @@ def add_user_ajax():
         db.session.add(new_user)
         db.session.commit()
 
-        msg = Message("Witamy w Portalu Pasażera KMK", recipients=[data['email']])
-        msg.body = f"Witamy w Portalu Pasażera KMK!\n\nDane logowania do Twojego nowego konta znajdziesz poniżej:\n\nLogin: {data['username']}\nHasło: {data['password']}"
-        mail.send(msg)
+        try:
+            msg = Message("Witamy w Portalu Pasażera KMK", recipients=[data['email']])
+            msg.body = f"Witamy w Portalu Pasażera KMK!\n\nDane logowania do Twojego nowego konta znajdziesz poniżej:\n\nLogin: {data['username']}\nHasło: {data['password']}"
+            mail.send(msg)
+        except:
+            print("Nie udało się wysłać powiadomienia e-mail")
 
         return jsonify({"success": True})
     except Exception as e:
@@ -389,9 +397,12 @@ def signup():
             flash('Nazwa użytkownika jest już zajęta. Wybierz inną.', 'danger')
             return redirect(url_for('signup'))
 
-        msg = Message("Witamy w Portalu Pasażera KMK", recipients=[email])
-        msg.body = f"Witamy w Portalu Pasażera KMK!\n\nDane logowania do Twojego nowego konta znajdziesz poniżej:\n\nLogin: {username}\nHasło: {password}"
-        mail.send(msg)
+        try:
+            msg = Message("Witamy w Portalu Pasażera KMK", recipients=[email])
+            msg.body = f"Witamy w Portalu Pasażera KMK!\n\nDane logowania do Twojego nowego konta znajdziesz poniżej:\n\nLogin: {username}\nHasło: {password}"
+            mail.send(msg)
+        except:
+            print("Nie udało się wysłać powiadomienia e-mail")
 
         new_user = User(
             name=firstname,
@@ -457,9 +468,12 @@ def reset_password(user_id):
     user.password = generate_password_hash(new_password)
     db.session.commit()
 
-    msg = Message("Reset hasła do Portalu Pasażera KMK", recipients=[user.email])
-    msg.body = f"Twoje nowe hasło do Portalu Pasażera KMK to: {new_password}"
-    mail.send(msg)
+    try:
+        msg = Message("Reset hasła do Portalu Pasażera KMK", recipients=[user.email])
+        msg.body = f"Twoje nowe hasło do Portalu Pasażera KMK to: {new_password}"
+        mail.send(msg)
+    except:
+        print("Nie udało się wysłać powiadomienia e-mail")
 
     return jsonify({'success': True, 'message': 'Hasło zresetowane i wysłane na e-mail.'})
 
@@ -622,6 +636,11 @@ def check_ticket():
         return jsonify({"success": True, "message": message})
     else:
         return jsonify({"success": False, "message": "Bilet jest nieważny."})
+    
+@app.route('/server/time')
+def get_time():
+    now = datetime.now().isoformat(timespec='seconds')
+    return jsonify({"time": now})
 
 # endpointy deweloperskie
 @app.route('/dev/tickets')

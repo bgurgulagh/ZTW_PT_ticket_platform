@@ -21,13 +21,13 @@ $(document).ready(function () {
                 modalBody.empty();
                 
                 if (response.success) {
-                    modalBody.css("background-color", "#d4edda"); // zielone tło dla ważnego biletu
+                    modalBody.css("background-color", "#65A930"); // Zielone tło dla ważnego biletu
                     modalBody.append("<p>Status biletu: " + response.message + "</p>");
                 } else if (response.message === "Bilet nie istnieje.") {
-                    modalBody.css("background-color", "#fff3cd"); // żółte tło gdy biletu nie można znaleźć w bazie
+                    modalBody.css("background-color", "#EB9000"); // Żółte tło gdy biletu nie można znaleźć w bazie
                     modalBody.append("<p>" + response.message + "</p>");
                 } else {
-                    modalBody.css("background-color", "#f8d7da"); // czerwone tło dla nieważnego biletu
+                    modalBody.css("background-color", "#E00726"); // Czerwone tło dla nieważnego biletu
                     modalBody.append("<p>" + response.message + "</p>");
                 }
                 
@@ -35,7 +35,7 @@ $(document).ready(function () {
             },
             error: function () {
                 let modalBody = $("#controlStatusModal .modal-body");
-                modalBody.empty().css("background-color", "#f8d7da").append("<p>Wystąpił problem podczas sprawdzania biletu.</p>"); // czerwone tło dla błędu
+                modalBody.empty().css("background-color", "#E00726").append("<p>Wystąpił problem podczas sprawdzania biletu.</p>"); // Czerwone tło dla błędu
                 $("#controlStatusModal").modal("show");
             }
         });
