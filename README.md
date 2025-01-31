@@ -364,6 +364,32 @@ def check_ticket():
   
 </details>
 
+## Konfiguracja wiadomości e-mail
+Aplikacja wysyła wiadomości e-mail użytkownikom:
+- e-mail powitalny dla nowych użytkowników, którzy zarejestrowali się samodzielnie lub też zostali dodani przez administratora
+- e-mail informujący o zedytowaniu danych użytkownika
+- e-mail zawierający nowe hasło dla użytkownika po zresetowaniu hasła przez administratora
+
+Do obsługi wiadomości został wykorzystany Flask-Mail. Został skonfigurowany do wysyłania wiadomości poprzez serwer SMTP Gmaila. Nadawcą jest "Portal Pasażera KMK" (portal.pasazera@gmail.com). 
+
+```python
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_DEFAULT_SENDER'] = 'Portal Pasażera KMK <portal.pasazera@gmail.com>'
+app.config['MAIL_USERNAME'] = 'portal.pasazera@gmail.com'
+
+mail = Mail(app)
+```
+
+Maile są tworzone, dzięki klasie Message(), która tworzy obiekt wiadomości. Treść maila jest ustawiana w msg.body.
+
+```python
+msg = Message("Witamy w Portalu Pasażera KMK", recipients=[data['email']])
+msg.body = f"Witamy w Portalu Pasażera KMK!\n\nDane logowania do Twojego nowego konta znajdziesz poniżej:\n\nLogin:     {data['username']}\nHasło: {data['password']}"
+mail.send(msg)
+```
+
 ## Instrukcja dla użytkowników
 
 ### Ogólne
