@@ -14,18 +14,34 @@
 
     <section id="kontrola">
       <div class="col-md-6 mx-auto py-4">
-        <div class="d-flex flex-wrap align-items-center justify-content-between mb-3" id="ticket_validation">
+        <div
+          class="d-flex flex-wrap align-items-center justify-content-between mb-3"
+          id="ticket_validation"
+        >
           <h2 id="ticket_id_label">Numer ID biletu</h2>
-          <p id="ticket_id_form_info">Wpisz numer ID biletu, aby sprawdzić jego ważność</p>
+          <p id="ticket_id_form_info">
+            Wpisz numer ID biletu, aby sprawdzić jego ważność
+          </p>
           <form id="ticket_validation_form">
-            <input type="text" class="form-control" id="ticket-id-number" aria-describedby="ticket-id-number-info" required>
-            <button type="submit" class="btn btn-primary">Sprawdź</button>
+            <input
+              type="text"
+              class="form-control"
+              id="ticket-id-number"
+              aria-describedby="ticket-id-number-info"
+              required
+            />
+            <button type="submit" class="btn btn-primary" id="checkTicketBtn">
+              Sprawdź
+            </button>
           </form>
         </div>
       </div>
     </section>
   </div>
 
+  <!-- modal kontroli -->
+  {% include 'TD_controler_controlStatus_modal.html' %}
+  <!-- footer -->
   {% include 'footer.html' %}
 
   <script
