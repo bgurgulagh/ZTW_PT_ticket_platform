@@ -40,9 +40,9 @@ W celu zapewnienia kompleksowości systemu zarządzania biletami, potencjalni u�
 - edycja danych w profilu użytkownika
 
 ## Wykorzystane technologie
-Frontend: JavaScript, HTML, CSS, Bootstrap, jQuery
-Backend: Flask
-Baza danych: SQLAlchemy
+- Frontend: JavaScript, HTML, CSS, Bootstrap, jQuery
+- Backend: Flask
+- Baza danych: SQLAlchemy
 
 ## Uruchomienie aplikacji
 1. Utworzenie wirtualnego środowiska
