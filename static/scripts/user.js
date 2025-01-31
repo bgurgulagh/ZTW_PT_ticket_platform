@@ -66,6 +66,51 @@ function edit_user() {
     });
 }
 
+// Edytowanie profilu
+function edit_profile() {
+    $(".edit-profile").click(function() {
+        let userId = $(this).data("user-id");
+        $("#editUserId").val(userId);
+        $("#editName").val($(this).data("name"));
+        $("#editSurname").val($(this).data("surname"));
+        $("#editUsername").val($(this).data("username"));
+        $("#editPassword").val($(this).data("password"));
+        $("#editEmail").val($(this).data("email"));
+        $("#editRole").val($(this).data("role"));
+        $("#editUserModal").modal("show");
+    });
+
+    $("#saveProfileChanges").click(function() {
+        let userId = $("#editUserId").val();
+        let updatedData = {
+            name: $("#editName").val(),
+            surname: $("#editSurname").val(),
+            username: $("#editUsername").val(),
+            password: $("#editPassword").val(),
+            email: $("#editEmail").val(),
+            role: $("#editRole").val()
+        };
+
+        $.ajax({
+            url: "/update_profile_ajax/" + userId,
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(updatedData),
+            success: function(response) {
+                if (response.success) {
+                    alert("Dane użytkownika zaktualizowane pomyślnie.");
+                    location.reload();
+                } else {
+                    alert("Błąd podczas aktualizacji danych.");
+                }
+            },
+            error: function() {
+                alert("Wystąpił problem podczas aktualizacji.");
+            }
+        });
+    });
+}
+
 // Generowanie hasła jako ciągu znaków
 function generatePassword(length) {
     let charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
@@ -144,6 +189,7 @@ $(document).ready(function() {
     del_user()
     edit_user()
     add_user()
+    edit_profile()
 });
 
 // Filtrowanie użytkowników
@@ -202,6 +248,7 @@ $(document).ready(function() {
                     del_user()
                     edit_user()
                     add_user()
+                    edit_profile()
                 }
             },
             error: function() {

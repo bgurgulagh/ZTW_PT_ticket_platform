@@ -324,6 +324,29 @@ def update_user_ajax(user_id):
 
     return jsonify({"success": True})
 
+# Edycja danych użytkownika w profilu
+@app.route('/update_profile_ajax/<int:user_id>', methods=['POST'])
+def update_profile_ajax(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"success": False, "error": "Użytkownik nie istnieje"}), 404
+
+    data = request.get_json()
+    user.name = data.get('name')
+    user.surname = data.get('surname')
+    user.username = data.get('username')
+    user.password = generate_password_hash(data.get('password'))
+    user.email = data.get('email')
+    user.role = data.get('role')
+
+    db.session.commit()
+
+    msg = Message("Dane konta w Portalu Pasażera KMK", recipients=[data.get('email')])
+    msg.body = f"Twoje dane w Profilu Pasażera KMK uległy zmianie.\n\nAktualne dane Twojego konta znajdziesz poniżej:\n\nLogin: {data.get('username')}\nImię: {data.get('name')}\nNazwisko: {data.get('surname')}\nRola: {data.get('role')}"
+    mail.send(msg)
+
+    return jsonify({"success": True})
+
 # Dodanie nowego użytkownika w panelu admina
 @app.route('/add_user_ajax', methods=['POST'])
 def add_user_ajax():
