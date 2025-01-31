@@ -247,8 +247,6 @@ $(document).ready(function() {
                     });
                     del_user()
                     edit_user()
-                    add_user()
-                    edit_profile()
                 }
             },
             error: function() {

@@ -3,7 +3,7 @@ function del_ticket() {
     $(".delete-ticket").click(function() {
         let ticketId = $(this).data("ticket-id");
 
-        if (confirm("Czy na pewno chcesz usunąć tego użytkownika?")) {
+        if (confirm("Czy na pewno chcesz usunąć ten bilet?")) {
             $.ajax({
                 url: "/delete_ticket_ajax/" + ticketId,
                 type: "DELETE",
@@ -160,7 +160,6 @@ $(document).ready(function() {
                     });
                     del_ticket();
                     edit_ticket();
-                    add_ticket();
                 }
             },
             error: function() {
